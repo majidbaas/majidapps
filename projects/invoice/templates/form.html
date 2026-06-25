@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ساخت فاکتور</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        body { background:#f5f7fa; font-family: Vazir; }
+        .card { border-radius:12px;  }
+        .table input { text-align:center; }
+		.mb-0 { text-align: center; font-weight: bold; font-size:22px; }
+		.mt-4 {font-size:16px; font-weight: bold;   } 
+		.form-label{ font-size:16px;  font-weight: lighter ;  }
+		.table { margin-top: -35px; }
+		.btn btn-danger btn-sm removeRow { padding:10px;  }
+		.col-lg-6 { margin-top: -10px;  }
+		
+    </style> 
+</head>
+<body>
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0" >ساخت فاکتور</h4>
+        </div>
+
+        <div class="card-body">
+            <form method="POST" action="/invoice">
+
+                <!-- تاریخ و شماره -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <label class="form-label">تاریخ</label>
+                        <input type="text" name="date" class="form-control"  id="invoice_date" placeholder="مثال: 1403/03/20" required>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">شماره فاکتور</label>
+                        <input type="text" name="invoice_number" class="form-control" required>
+                    </div>
+					<div class="col-md-3">
+						<label class="form-label">شماره کارت</label>					
+						<input type="text" name="card_number" id="card_number" class="form-control" >
+					</div>
+					<div class="col-md-3">
+						<label class="form-label">نام صاحب کارت</label>					
+						<input type="text" name="card_number_name"  class="form-control" >
+					</div>
+                </div>
+				
+				
+				
+				
+<div class="row mt-4">
+
+ 
+    <!-- فروشنده -->
+    <div class="col-lg-6 mb-3">
+        <div class="card">
+            <div class="card-header">
+               مشخصات فروشنده
+            </div>
+            <div class="card-body">
+                <div class="mb-2"> 
+                    <input type="text" name="seller" class="form-control" placeholder="نام فروشنده:">
+                </div>
+                <div class="mb-2">                 
+                    <input type="text" name="seller_phone" class="form-control" placeholder="تلفن:">
+                </div>
+                <div>                  
+                    <input type="text" name="seller_address" class="form-control" placeholder="آدرس:">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- خریدار -->
+    <div class="col-lg-6 mb-3">
+        <div class="card">
+            <div class="card-header">
+                مشخصات خریدار
+            </div>
+            <div class="card-body">
+                <div class="mb-2"> 
+                    <input type="text" name="buyer" class="form-control" placeholder="نام خریدار:">
+                </div>
+                <div class="mb-2">                 
+                    <input type="text" name="buyer_phone" class="form-control" placeholder="تلفن:">
+                </div>
+                <div>                  
+                    <input type="text" name="buyer_address" class="form-control" placeholder="آدرس:">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+                
+				
+                <!-- جدول کالا -->
+                <table class="table table-bordered mt-3" id="itemsTable">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>شرح کالا</th>
+                            <th>تعداد</th>
+                            <th>قیمت واحد (ریال)</th>
+                            <th>مبلغ</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="items">
+                        <tr>
+                            <td><input name="item[]" class="form-control" required></td>
+                            <td><input name="qty[]" class="form-control qty" required></td>
+                            <td><input name="price[]" class="form-control price number-format" required></td>
+                            <td class="amount">0</td><td><button type="button" class="btn btn-danger btn-sm removeRow">X</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-success mb-3" id="addRow">➕ افزودن ردیف</button>
+
+                <!-- جمع کل -->
+                <div class="row mt-4">
+                    <div class="col-md-4 me-auto">
+                        <table class="table">
+                            <tr>
+                                <th>جمع </th>
+                                <td id="subtotal">0</td>
+                            </tr>
+                            <tr>
+                                <th>تخفیف</th>
+                                <td><input
+										type="text"
+										id="discount"
+										name="discount"
+										class="form-control number-format"
+										value="0"></td>
+                            </tr>
+                            <tr>
+								<th>درصد مالیات</th>
+								<td>
+									<tr>
+										<th>مالیات</th>
+										<td>
+
+											<div class="form-check form-switch">
+												<input
+													class="form-check-input"
+													type="checkbox"
+													id="vat_enabled"
+													name="vat_enabled"
+													checked>
+
+												<label class="form-check-label" for="vat_enabled">
+													اعمال مالیات
+												</label>
+											</div>
+
+											<br>
+
+											<input
+												type="number"
+												id="vat_percent"
+												name="vat_percent"
+												class="form-control"
+												value="10">
+
+										</td>
+									</tr>
+								</td>
+							</tr>
+                            <tr>
+                                <th>مبلغ مالیات</th>
+                                <td id="vatAmount">0</td>
+                            </tr>
+                            <tr class="table-primary">
+                                <th>جمع کل</th>
+                                <td id="total">0</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- توضیحات -->
+                <div class="mb-3">
+                    <label class="form-label">توضیحات</label>
+                    <textarea name="notes" class="form-control" rows="3"></textarea>
+                </div>
+				
+
+                <button type="submit" class="btn btn-primary w-100 mt-3">ثبت و ساخت PDF</button>
+				<div class="back-home">
+					<a href="http://localhost:5000/" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
+				</div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- محاسبات -->
+<script>
+function calc() {
+    let subtotal = 0;
+
+    document.querySelectorAll("#items tr").forEach(row => {
+        let qty = Number(row.querySelector(".qty").value.replace(/,/g,"")) || 0;
+        let price = Number(row.querySelector(".price").value.replace(/,/g,"")) || 0;
+        let amount = qty * price;
+        row.querySelector(".amount").innerText = amount.toLocaleString();
+        subtotal += amount;
+    });
+
+    document.getElementById("subtotal").innerText = subtotal.toLocaleString();
+
+    let discount = Number(document.getElementById("discount").value.replace(/,/g,"")) || 0;
+      let vatPercent =
+      Number(document.getElementById("vat_percent").value) || 0;
+			  let vatEnabled =
+			document.getElementById("vat_enabled").checked;
+
+		let vat = 0;
+
+		if (vatEnabled) {
+			vat =
+				(subtotal - discount)
+				* vatPercent / 100;
+		}
+		document.getElementById("vatAmount").innerText = vat.toLocaleString();
+		document.getElementById("total").innerText = (subtotal - discount + vat).toLocaleString();
+	}
+
+document.addEventListener("input", calc);
+
+document.getElementById("addRow").onclick = () => {
+    let row = document.querySelector("#items tr").cloneNode(true);
+    row.querySelectorAll("input").forEach(i => i.value = "");
+    row.querySelector(".amount").innerText = "0";
+    document.getElementById("items").appendChild(row);
+};
+
+document.addEventListener("click", e => {
+    if (e.target.classList.contains("removeRow")) {
+        e.target.closest("tr").remove();
+        calc();
+    }
+});
+
+function formatNumberInput(input) {
+    let value = input.value.replace(/,/g, "");
+    if (value === "") return;
+
+    input.value = Number(value).toLocaleString("en-US");
+}
+
+document.addEventListener("input", function(e) {
+
+    if (e.target.classList.contains("number-format")) {
+
+        let cursorPos = e.target.selectionStart;
+
+        let raw = e.target.value.replace(/,/g, "");
+
+        if (!isNaN(raw) && raw !== "") {
+            e.target.value = Number(raw).toLocaleString("en-US");
+        }
+
+        calc();
+    }
+});
+
+document.getElementById("vat_enabled")
+.addEventListener("change", function() {
+
+    document.getElementById("vat_percent").disabled =
+        !this.checked;
+
+    calc();
+});
+document.getElementById('card_number').addEventListener('input', function(e) {
+
+    let value = e.target.value.replace(/\D/g, '');
+
+    value = value.substring(0,16);
+
+    value = value.match(/.{1,4}/g)?.join('-') || '';
+
+    e.target.value = value;
+});
+
+document.getElementById('invoice_date').addEventListener('input', function(e){
+
+    let value = e.target.value.replace(/\D/g,'');
+
+    if(value.length > 8)
+        value = value.substring(0,8);
+
+    if(value.length > 4){
+        value = value.substring(0,4) + '/' + value.substring(4);
+    }
+
+    if(value.length > 7){
+        value = value.substring(0,7) + '/' + value.substring(7);
+    }
+
+    e.target.value = value;
+});
+
+document.getElementById("vat_percent").disabled =
+    !document.getElementById("vat_enabled").checked;
+	document.getElementById("vat_percent")
+.addEventListener("input", calc);
+</script>
+
+</body>
+</html>

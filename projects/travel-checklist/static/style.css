@@ -1,0 +1,648 @@
+/* =========================
+   Fonts
+========================= */
+@font-face {
+  font-family: "Shabnam";
+  src: url("/static/fonts/Shabnam.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "alibaba";
+  src: url("https://cdn.alibaba.ir/h2/desktop/assets/fonts/alibaba/alibaba-regular.woff2-5d2979c4.woff2") format("woff2");
+}
+
+/* =========================
+   Base
+========================= */
+body {
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+  font-family: "alibaba";
+  font-size: 14px;
+  background-color: #f4f7f6; /* یک رنگ پس‌زمینه ملایم */
+  color: #333;
+  line-height: 1.6;
+  
+}
+h1{
+	font-size: 21px;
+	
+margin-top: -20px;	
+margin-bottom: 10px;
+}
+
+h2{
+	font-size: 21px;
+	display: flex;
+	color: #304b7d;
+	align-items: center;
+	justify-content: center;
+margin-top: -20px;	
+margin-bottom: 10px;
+}
+h3{
+	font-size: 21px;
+	margin-top: -10px;	
+margin-bottom: 20px;
+}
+/* =========================
+   Header
+========================= */
+..main-header {
+  background-color: #ffffff; /* سفید */
+  padding: 15px 0;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.main-header .title h1 {
+  color: #007bff; /* آبی */
+  margin-bottom: 5px;
+}
+.main-header .title span {
+  color: #666;
+  font-size: 0.9em;
+}
+
+/* =========================
+   Wrapper
+========================= */
+.page-wrapper,
+.review-wrapper,
+.result-wrapper {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 35px;
+  padding-bottom: 10px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  margin-top: 15px;
+}
+
+/* =========================
+   Stepper
+========================= */
+
+.stepper-container {
+  width: 80%;
+  margin: 20px auto;
+  overflow: hidden;
+  margin-top: -15px;
+  margin-bottom: -5px;
+}
+.stepper-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  counter-reset: step;
+}
+.step {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* خط اتصال */
+.connector {
+  width: 60px;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 27px;
+ 
+}
+
+/* خط پرشونده */
+.connector::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #2563eb;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .8s ease;
+}
+
+.step .circle {
+  background-color: #ccc;
+  color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.step .label {
+  color: #666;
+  font-size: 0.9em;
+}
+.step.active .circle {
+  background-color: #007bff; /* رنگ آبی فعال */
+}
+.step.active .label {
+  color: #007bff;
+  font-weight: bold;
+}
+.connector {
+  flex-grow: 1;
+  height: 2px;
+  background-color: #ccc;
+  position: relative;
+  top: -15px; /* تنظیم موقعیت کانکتور */
+}
+/* استایل خطوط بین مراحل برای زمانی که مرحله فعال است */
+.step.active ~ .step .connector,
+.step.active ~ .step .step .connector {
+  background-color: #007bff;
+}
+/* =========================
+   Page Title
+========================= */
+.page-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 25px;
+}
+
+/* =========================
+استایل هر کارت
+========================= */
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* واکنش‌گرا: حداقل عرض ۳۰۰ پیکسل */
+  gap: 25px; /* فاصله بین کارت‌ها */
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.checklist-category-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* سایه ملایم */
+  padding: 20px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border: 1px solid #e0e0e0;
+}
+.checklist-category-card:hover {
+  transform: translateY(-5px); /* افکت هاور */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+.checklist-category-card .card-header {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.checklist-category-card h4 {
+  color: #0056b3; /* رنگ تیره‌تر برای عنوان دسته */
+  margin: 0;
+  font-size: 1.3em;
+}
+
+/* استایل لیست آیتم‌ها داخل کارت */
+.item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.checklist-item {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: flex-start; /* هم‌ترازی بالا */
+}
+.checklist-item label {
+  display: flex;
+  align-items: center; /* هم‌ترازی عمودی */
+  cursor: pointer;
+  flex-grow: 1;
+}
+.item-checkbox {
+  margin-left: 10px; /* فاصله از متن */
+  width: 18px;
+  height: 18px;
+  accent-color: #007bff; /* رنگ چک‌باکس */
+}
+.item-name {
+  font-weight: 500; /* کمی ضخیم‌تر */
+  color: #333;
+  line-height: 1.3; /* اضافه کردن این خط برای فشرده‌تر کردن فاصله خطوط */
+
+}
+.item-description {
+  font-size: 0.85em;
+  color: #777;
+  margin-left: 15px; /* فاصله از چک‌باکس */
+  margin-top: 1px; /* تنظیم دقیق‌تر موقعیت */
+  flex-shrink: 0; /* جلوگیری از کوچک شدن توضیحات */
+  line-height: 1; /* اضافه کردن این خط برای فشرده‌تر کردن فاصله خطوط */
+
+}
+
+
+
+
+/* --- تنظیمات برای موبایل --- */
+@media (max-width: 768px) {
+    .action-buttons button {
+        width: 90%; /* دکمه ها در موبایل بزرگتر شوند */
+        margin: 5px auto;
+        display: block; /* هر دکمه در یک خط */
+    }
+
+    .stepper li {
+        display: block; /* مراحل روی هم قرار بگیرند */
+        margin-bottom: 20px;
+    }
+    .stepper li:not(:last-child):after {
+        display: none; /* خطوط افقی در موبایل حذف شوند */
+    }
+}
+
+
+
+/* =========================
+   Form Grid
+========================= */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 700;
+  color: #444;
+  font-size: 15px;
+  margin-top: -7px;
+}
+
+/* =========================
+   Inputs
+========================= */
+.form-group input,
+.form-group select {
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  font-size: 15px;
+  padding: 0 15px;
+  font-family: "Shabnam";
+  transition: 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  background: #fff;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+  outline: none;
+}
+
+/* =========================
+   Button
+========================= */
+.actions-container {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding: 20px;
+  border-top: 1px solid #eee;
+}
+
+.submit-btn {
+  display: block;
+  margin: 1px auto 10px;
+  margin-bottom: 1px;
+  width: 260px;
+  height: 55px;
+  border-radius: 16px;
+  border: none;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: "Shabnam";
+  color: #fff;
+  background: #2563eb;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.print-btn, .back-link  {
+  padding: 12px 25px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: -30px;
+}
+.print-btn {
+  background-color: #28a745; /* سبز */
+  color: white;
+}
+.print-btn:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+.back-link {
+  background-color: #6c757d; /* خاکستری */
+  color: white;
+}
+.back-link:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(37,99,235,0.3);
+}
+
+/* =========================
+   Cards (Result Page)
+========================= */
+.checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: 1fr; /* تک ستونی */
+  }
+  .checklist-item {
+    flex-direction: column; /* برای موبایل، چک‌باکس و متن کنار هم قرار گیرند */
+    align-items: flex-start;
+  }
+  .item-checkbox {
+    margin-bottom: 8px;
+    margin-left: 0;
+  }
+  .item-description {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+  .print-btn, .back-link {
+   
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+  .actions-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .checklist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+h1{
+	font-size: 21px;
+	
+margin-top: -5px;	
+margin-bottom: 10px;
+}
+
+h2{
+	font-size: 21px;
+	display: flex;
+	color: #304b7d;
+	align-items: center;
+	justify-content: center;
+margin-top: -20px;	
+margin-bottom: 10px;
+}
+
+h3{
+	font-size: 18px;
+	margin-top: -5px;	
+margin-bottom: 20px;
+}
+h4{
+	font-size: 20px;
+	margin-top: 10px;	
+margin-bottom: 20px;
+}
+.stepper-container {
+  display: flex;
+  justify-content: center;
+  margin: 8px ;
+  
+}
+
+.stepper-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 8px 16px;
+  background: #f8fafc;
+  border-radius: 16px;
+  will-change: transform;
+  margin-top: -8px;
+
+}
+
+.submit-btn {
+  display: block;
+  margin: 15px auto 10px;
+  margin-bottom: 1px;
+  width: 260px;
+  height: 55px;
+  border-radius: 16px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Shabnam";
+  color: #fff;
+  background: #2563eb;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+
+  body {
+    font-size: 13px;
+  }
+
+  .page-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 15px;
+	 
+  }
+
+  .form-grid,
+  .checklist-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+
+}
+
+
+
+.modal-box {
+  background: #fff;
+  padding: 16px;
+  border-radius: 14px;
+  width: min(90vw, 260px);
+  height: auto;
+}
+
+.modal-overlay {
+  display: none;          /* پیش‌فرض مخفی */
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-overlay.active {
+  display: flex;          /* فقط وقتی بازه */
+}
+
+.traveler-input {
+  user-select: none;
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.traveler-input:hover {
+  background: #fff;
+  border-color: #2563eb;
+}
+
+.traveler-input::after {
+  content: "▼";
+  margin-right: auto;
+  font-size: 12px;
+  color: #888;
+}
+
+.traveler-input {
+  animation: pulse 1.6s infinite;
+}
+.traveler-input .edit-icon {
+  opacity: 0.6;
+}
+
+.traveler-input:hover .edit-icon {
+  opacity: 1;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(37,99,235,.4); }
+  70% { box-shadow: 0 0 0 6px rgba(37,99,235,0); }
+  100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
+}
+
+.cards-container{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    margin-top:30px;
+}
+
+.category-card{
+    background:#fff;
+    border-radius:16px;
+    padding:20px;
+    min-width:280px;
+    flex:1;
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.card-title{
+    font-size:22px;
+    font-weight:bold;
+    color:#234;
+    margin-bottom:15px;
+    border-bottom:2px solid #e5e5e5;
+    padding-bottom:10px;
+}
+
+.item-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.item-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid #f0f0f0;
+}
+
+.item-row:last-child{
+    border-bottom:none;
+}
+
+.item-row input{
+    width:18px;
+    height:18px;
+}

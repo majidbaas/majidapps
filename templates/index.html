@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ابزارهای کاربردی | پروژه‌های من</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- هدر -->
+    <header>
+        <div class="container">
+            <h1>🚀 ابزارهای کاربردی</h1>
+            <p class="subtitle">مجموعه‌ای از اپلیکیشن‌های تحت وب برای حل مشکلات روزمره</p>
+            <p class="subtitle small">توسعه‌یافته با Flask • پایتون • HTML/CSS</p>
+        </div>
+    </header>
+
+    <!-- بخش پروژه‌ها -->
+    <main class="container">
+        <h2>پروژه‌ها</h2>
+        <div class="projects-grid">
+
+            {% for project in projects %}
+            <div class="project-card status-{{ project.status|replace(' ', '-')|lower }}">
+                <div class="card-icon">{{ project.icon }}</div>
+                <h3>{{ project.title }}</h3>
+                <p>{{ project.description }}</p>
+                <span class="status-badge">{{ project.status }}</span>
+                <br>
+                {% if project.url != '#' %}
+                <a href="{{ project.url }}" class="btn">ورود به اپلیکیشن</a>
+                {% else %}
+                <button class="btn disabled" disabled>به‌زودی</button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- فوتر -->
+    <footer>
+        <div class="container">
+            <p>ساخته شده توسط <a href="https://github.com/your-username" target="_blank">شما</a></p>
+            <p>کد منبع روی <a href="https://github.com/your-username/my-website" target="_blank">گیت‌هاب</a></p>
+        </div>
+    </footer>
+
+</body>
+</html>

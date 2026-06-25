@@ -1,0 +1,385 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8f9fa;
+    color: #333;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 40px 0 20px;
+    border-bottom: 3px solid #ff6b35;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #ff6b35;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* فرم */
+.form-group {
+    margin: 20px 0;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #ff6b35;
+}
+
+small {
+    display: block;
+    color: #888;
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
+
+.error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 35px;
+    background: #ff6b35;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: #e55a2b;
+}
+
+/* نکات */
+.tips {
+    background: #e9ecef;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 30px 0;
+}
+
+.tips h3 {
+    margin-bottom: 10px;
+    color: #495057;
+}
+
+.tips ul {
+    list-style: none;
+    padding-right: 0;
+}
+
+.tips ul li {
+    padding: 5px 0;
+    color: #555;
+}
+
+.tips ul li::before {
+    content: "✓ ";
+    color: #ff6b35;
+    font-weight: bold;
+}
+
+/* نتیجه */
+.result-count {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #495057;
+}
+
+.no-result {
+    text-align: center;
+    padding: 50px 0;
+}
+
+.no-result p {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 10px 0;
+}
+
+/* کارت‌های غذا */
+
+.recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+    margin: 20px 0;
+}
+
+.recipe-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 18px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    border-right: 5px solid #ff6b35;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.recipe-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.recipe-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f1f3f5;
+    padding-bottom: 10px;
+}
+
+.recipe-header h3 {
+    font-size: 1.2rem;
+    color: #212529;
+    margin: 0;
+}
+
+.match-badge {
+    background: #ff6b35;
+    color: white;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.recipe-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.recipe-details p {
+    margin: 3px 0;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.ingredients-list,
+.missing-ingredients {
+    margin: 4px 0;
+}
+
+.ingredients-list strong,
+.missing-ingredients strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+}
+
+.ingredients-list ul,
+.missing-ingredients ul {
+    list-style: none;
+    padding-right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 0;
+}
+
+.ingredients-list ul li {
+    background: #e9ecef;
+    padding: 3px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+}
+
+.missing-ingredients ul li {
+    background: #f8d7da;
+    padding: 3px 12px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    color: #721c24;
+}
+
+/* ===== بخش طرز تهیه ===== */
+details {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e9ecef;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: #ff6b35;
+    padding: 3px 0;
+    font-size: 0.95rem;
+}
+
+details p {
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    color: #495057;
+    line-height: 1.6;
+}
+.ingredients-list,
+.missing-ingredients {
+    margin: 10px 0;
+}
+
+.ingredients-list ul,
+.missing-ingredients ul {
+    list-style: none;
+    padding-right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.ingredients-list ul li {
+    background: #e9ecef;
+    padding: 3px 12px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.missing-ingredients ul li {
+    background: #f8d7da;
+    padding: 3px 12px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    color: #721c24;
+}
+
+details {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e9ecef;
+}
+
+summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: #ff6b35;
+}
+
+details p {
+    margin-top: 8px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    color: #495057;
+}
+
+.back-link {
+    text-align: center;
+    margin: 30px 0;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 30px;
+    border-top: 1px solid #e9ecef;
+}
+
+footer a {
+    color: #ff6b35;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* ریسپانسیو */
+@media (max-width: 768px) {
+    header h1 { font-size: 2rem; }
+    .recipes-grid { grid-template-columns: 1fr; }
+    .recipe-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+.hint {
+    display: block;
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.info-box {
+    background: #e7f3ff;
+    border-right: 4px solid #007bff;
+    padding: 12px 18px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    color: #004085;
+}
+/* دکمه بازگشت */
+.btn-back {
+    display: inline-block;
+    padding: 10px 25px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+    margin: 5px;
+}
+
+.btn-back:hover {
+    background: #5a6268;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}

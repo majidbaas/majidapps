@@ -1,0 +1,268 @@
+{
+  "categories": [
+     {
+      "title": "لباس",
+      "rules": {},
+      "items": [
+        {
+          "name": "تی شرت ، پیراهن ، شلوار",
+          "default_count": 1,
+          "description": "",
+          "rules": {}
+        },
+		{
+          "name": "لباس زیر ، جوراب",
+          "default_count": 1,
+          "description": "",
+          "rules": {}
+		 
+        },
+		{
+          "name": "لباس گرم(ژاکت ، هودی ، کاپشن)",
+          "default_count": 1,
+          "description": "",
+          "rules": { "season": ["winter"] }
+		 
+        },
+        {
+          "name": "لباس بارانی/کاور ضدآب",
+          "default_count": 1,
+          "description": "",
+          "rules": {
+            "transport": ["motor" , "car" , "camp"]
+          }
+        },
+		{
+          "name": "دمپایی یا صندل",
+          "default_count": 1,
+          "description": "",
+          "rules": {
+          "hotel_type": ["familyHome" , "villa" , "hostel"]
+          }
+        }
+      ]
+    },
+	
+	{
+      "title": "مدارک",
+      "rules": {},
+      "items": [
+        {
+          "name": "کارت ملی",
+          "default_count": 1,
+          "description": "",
+          "rules": {}
+        },
+		{
+          "name": "بلیط هواپیما",
+          "default_count": 1,
+          "description": "",
+          "rules": { 
+		  "transport": ["plane"] 
+        }
+		},
+		
+		{
+          "name": "شناسنامه",
+          "default_count": 1,
+          "description": "",
+          "rules": {}
+        },
+        {
+          "name": "پاسپورت",
+          "default_count": 1,
+          "description": "برای سفر خارجی",
+          "rules": {
+            "travel_type": ["international"]
+          }
+        },
+		{
+          "name": "مدارک هتل",
+          "default_count": 1,
+          "description": "",
+          "rules": {
+          "hotel_type": ["hotel"]
+          }
+        },
+		{
+          "name": "مدارک خودرو",
+           
+          "description": "",
+          "rules": {
+            "transport": ["car"]
+          }
+        },
+		{
+          "name": "مدارک موتور",
+           
+          "description": "",
+          "rules": {
+            "transport": ["motor"]
+          }
+        }
+      ]
+    },{
+      "title": "بهداشت ",
+      "rules": {},
+      "items": [
+        {
+          "name": "دستمال",
+          "default_count": 1,
+          "description": "",
+          "rules": {}
+        },
+		{
+          "name": "مسواک و خمیر دندان",
+          "default_count": 1,
+          "description": "",
+          "rules": {}
+        }
+      ]
+    },{
+      "title": "مورد نیاز مسیر ",
+      "rules": {},
+      "items": [
+        {
+          "name": "کتاب",
+          "default_count": 1,
+          "description": "",
+          "rules": { 
+		 
+		  "transport": ["plane" , "train"] 
+		  }
+        },
+		{
+          "name": "بالشت گردنی",
+          "default_count": 1,
+          "description": "",
+          "rules": { 
+		  "transport": ["plane"] 
+		  }
+        },
+		{
+          "name": "بالشت مسافرتی",
+          "default_count": 1,
+          "description": "",
+          "rules": { 
+		  "transport": ["train"] 
+		  }
+		 
+        }
+      ]
+    },
+	{
+      "title": "مسیر   ",
+      "rules": {},
+      "items": [
+        {
+          "name": "مسیر یابی",
+          "default_count": 1,
+          "description": "",
+          "rules": { 
+		  "hotel_type": ["familyHome" , "eco", "hotel", "hostel", "suite" , "villa" ],
+		  "transport": ["motor" , "car"] 
+		  }
+        },
+		{
+          "name": "بررسی وضعیت آب و هوای مسیر",
+          "default_count": 1,
+          "description": "",
+          "rules": { 
+		  "hotel_type": ["familyHome" , "eco", "hotel", "hostel", "suite" , "villa" ],
+		  "transport": ["motor" , "car"] 
+		  }
+        }
+      ]
+    }
+	
+	
+	
+	,{
+      "title": "اقامت ",
+      "rules": {},
+      "items": [
+        
+		{
+          "name": "بررسی مسیر",
+          
+          "description": "",
+          "rules": {
+          "hotel_type": ["villa"]
+          }
+        },
+		{
+          "name": "مواد غذایی",
+          
+          "description": "به مقدار لازم",
+          "rules": {
+          "hotel_type": ["villa"]
+          }
+        },
+		{
+          "name": "کلید ویلا",
+         
+          "description": "",
+          "rules": {
+            "hotel_type": ["villa"]
+          }
+        },
+		 {
+          "name": "چراق قوه",
+         
+          "description": "",
+          "rules": {
+            "hotel_type": ["camp"]
+          }
+        },
+		{
+          "name": "هدیه برای میزبان",
+          "default_count": 1,
+          "description": "",
+          "rules": { 
+		  "hotel_type": ["familyHome"] 
+		  }
+        },
+		{
+          "name": "هماهنگی با میزبان",
+          "default_count": 1,
+          "description": "",
+          "rules": { 
+		  "hotel_type": ["familyHome"] 
+		  }
+        },
+		{
+          "name": "رختخواب سبک",
+          "default_count": 1,
+          "description": "",
+          "rules": { 
+		  "hotel_type": ["familyHome"] 
+		  }
+		 
+        }
+      ]
+    },
+	
+    {
+      "title": "لباس",
+      "rules": {},
+      "items": [
+        {
+          "name": "کاپشن گرم",
+          "default_count": 1,
+          "description": "برای هوای سرد",
+          "rules": {
+            "season": ["winter"]
+          }
+        },
+        {
+          "name": "لباس خنک",
+          "default_count": 2,
+          "description": "برای تابستان",
+          "rules": {
+            "season": ["summer"]
+          }
+        }
+      ]
+    }
+  ]
+}

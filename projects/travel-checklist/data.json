@@ -1,0 +1,140 @@
+{
+  "categories": [
+    {
+      "title": "مدارک",
+      "rules": {},
+      "items": [
+        {
+          "name": "کارت ملی",
+          "default_count": 1,
+          "description": "مدرک شناسایی",
+          "rules": {}
+        },
+        {
+          "name": "پاسپورت",
+          "default_count": 1,
+          "description": "برای سفر خارجی",
+          "rules": {
+            "travel_type": ["external"]
+          }
+        },
+		{
+          "name": "مدارک هتل",
+          "default_count": 1,
+          "description": "وچر هتل",
+          "rules": {
+            "hotel_type": ["hotel"]
+          }
+        },
+		{
+          "name": "مدارک خودرو",
+          "default_count": 1,
+          "description": "کارت ماشین و گواهینامه",
+          "rules": {
+            "transport": ["car"]
+          }
+        }
+      ]
+    },
+    {
+      "title": "لباس",
+      "rules": {},
+      "items": [
+        {
+          "name": "کاپشن گرم",
+          "default_count": 1,
+          "description": "برای هوای سرد",
+          "rules": {
+            "season": ["winter"]
+          }
+        },
+        {
+          "name": "لباس خنک",
+          "default_count": 2,
+          "description": "برای تابستان",
+          "rules": {
+            "season": ["summer"]
+          }
+        }
+      ]
+    },
+	{
+  "title": "لوازم بهداشتی",
+  "rules": {},
+  "items": [
+    {
+      "name": "مسواک",
+      "default_count": 1,
+      "description": "",
+      "rules": {}
+    },
+    {
+      "name": "خمیر دندان",
+      "default_count": 1,
+      "description": "",
+      "rules": {}
+    },
+    {
+      "name": "شامپو",
+      "default_count": 1,
+      "description": "",
+      "rules": {
+        "stay_type": ["hotel", "villa"]
+      }
+    }
+  ]
+},
+{
+  "title": "وسایل الکترونیکی",
+  "rules": {},
+  "items": [
+    {
+      "name": "شارژر موبایل",
+      "default_count": 1,
+      "description": "",
+      "rules": {}
+    },
+    {
+      "name": "پاوربانک",
+      "default_count": 1,
+      "description": "",
+      "rules": {}
+    },
+    {
+      "name": "هدفون",
+      "default_count": 1,
+      "description": "",
+      "rules": {
+        "transport": ["plane", "train"]
+      }
+    }
+  ]
+},
+{
+  "title": "دارو",
+  "rules": {},
+  "items": [
+    {
+      "name": "مسکن",
+      "default_count": 1,
+      "description": "",
+      "rules": {}
+    },
+    {
+      "name": "داروی شخصی",
+      "default_count": 1,
+      "description": "",
+      "rules": {}
+    },
+    {
+      "name": "قرص ضد تهوع",
+      "default_count": 1,
+      "description": "",
+      "rules": {
+        "transport": ["bus", "ship"]
+      }
+    }
+  ]
+}
+  ]
+}

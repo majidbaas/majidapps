@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پیشنهاد غذا بر اساس مواد اولیه</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍳 پیشنهاد غذا</h1>
+            <p class="subtitle">مواد اولیه‌ای که داری را وارد کن، ما بهت غذا پیشنهاد می‌دهیم!</p>
+        </header>
+
+        <main>
+            <form method="POST">
+                <div class="form-group">
+                    <label for="ingredients">مواد اولیه (با کاما جدا کن):</label>
+                    <input type="text" 
+                           id="ingredients" 
+                           name="ingredients" 
+                           placeholder="مثال: تخم‌مرغ، گوجه، پیاز، نمک"
+                           required>
+                    <small>مثال: تخم‌مرغ، گوجه، پیاز، نمک، فلفل</small>
+                </div>
+
+                {% if error %}
+                <div class="error">{{ error }}</div>
+                {% endif %}
+
+                <button type="submit" class="btn">پیدا کردن غذاها</button>
+            </form>
+
+            <div class="tips">
+                <h3>💡 نکات:</h3>
+                <ul>
+                    <li>مواد را با کاما (،) از هم جدا کن</li>
+                    <li>اگه ماده‌ای نداری، ننویس</li>
+                    <li>هرچه مواد بیشتری وارد کنی، پیشنهادات دقیق‌تر می‌شود</li>
+			        <li>حداقل پنج مواد اولیه وارد کنید تا نتیجه بهتر پیدا شود</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <a href=""http://localhost:5000/">بازگشت به صفحه اصلی</a>
+        </footer>
+    </div>
+</body>
+</html>

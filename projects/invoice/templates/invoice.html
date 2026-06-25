@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>فاکتور</title>
+
+    <style>
+        @font-face {
+            font-family: "Vazir";
+            src: url("https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/Vazir.ttf");
+        }
+
+        body {
+            direction: rtl;
+            font-family: "Vazir";
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border: 1px solid black;
+            border-spacing: 0;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 6px;
+        }
+
+        th {
+            background: #eee;
+        }
+		.header {
+			width: 100%;
+			overflow: hidden;
+		}
+
+		.right {
+		margin-top: 85px;
+			float: right;
+		}
+		.title {
+			text-align: center;
+			width: 100%;
+			margin-bottom: 20px;
+		}
+
+		.left {
+			float: left;
+			text-align: left;
+		}
+		.summary-box{
+			border:1px solid #999;
+			width:50%;
+			float:left;
+			padding:0;
+			background:#fff;
+}
+
+.summary-table{
+    width:100%;
+   
+	 border: 1px solid black;
+    margin:0;
+}
+
+.summary-table td{
+    border-bottom:1px solid #ccc;
+	 border: 1px solid black;
+    padding:9px 5px;
+}
+
+.summary-table tr:last-child td{
+    border-bottom:none;
+    font-size:16px;
+    font-weight:bold;
+    background:#f5f5f5;
+}
+		.final-row {
+		   background-color: #d9edf7;
+		   font-size: 16px;
+		   font-weight: bold;
+		 
+		}
+		.bottom-section{
+		display:felx;
+		justify-content:space-between;
+    width:100%;
+    margin-top:8px;
+}
+
+
+
+.notes-box{
+    float:right;
+    width:100%;
+    min-height:120px;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+.signatures{
+    margin-top:35px;
+}
+
+.seller-sign{
+	margin-right: 30px;
+    float:right;
+}
+
+.buyer-sign{
+margin-left: 30px;
+    float:left;
+}
+    </style>
+</head>
+<body>
+
+
+    
+        <h2 class="title">فاکتور فروش</h2>
+
+
+    <div class="left">
+        <p><strong>شماره فاکتور:</strong> {{ invoice_number|fa }}</p>
+        <p><strong>تاریخ:</strong> {{ invoice_date|fa }}</p>
+    </div>
+	 <div class="right">
+	<p><strong>فروشنده:</strong> {{ seller }}  
+	    <span style= "margin-right: 20px;">
+			<strong>شماره تلفن:</strong> 
+			{{ seller_phone | fa }}
+		</span>
+		<span style= "margin-right: 20px;">
+			<strong>آدرس:</strong> 
+			{{ seller_address }}
+		</span>
+			
+	</p>
+
+
+    <p><strong>خریدار:</strong> {{ buyer }}  
+		<span style= "margin-right: 20px;">
+			<strong>شماره تلفن:</strong> 
+			{{ buyer_phone | fa }}
+		</span>
+		<span style= "margin-right: 20px;">
+			<strong>آدرس:</strong> 
+			{{ buyer_address }}
+		</span>
+	</p>
+
+</div>
+
+
+
+<table>
+    <tr>
+        <th>شرح</th>
+        <th>تعداد</th>
+        <th>قیمت واحد</th>
+        <th>مبلغ</th>
+    </tr>
+
+    {% for item in items %}
+    <tr>
+        <td>{{ item.title }}</td>
+        <td>{{ "{:,.0f}".format(item.quantity)|fa }}</td>
+        <td>{{ "{:,.0f}".format(item.price)|fa }}</td>
+        <td>{{ "{:,.0f}".format(item.subtotal)|fa }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<!-- اینجا جدول تمام شده -->
+
+<div class="bottom-section">
+
+    <div class="summary-box">
+
+<table class="summary-table">
+    <tr>
+        <td>جمع کل</td>
+        <td>{{ "{:,.0f}".format(total_before_discount)|fa }}</td>
+    </tr>
+
+    <tr>
+        <td>تخفیف</td>
+        <td>{{ "{:,.0f}".format(total_discount)|fa }}</td>
+    </tr>
+
+    <tr>
+        <td>مالیات</td>
+        <td>{{ "{:,.0f}".format(vat_amount)|fa }}</td>
+    </tr>
+
+    <tr>
+        <td>مبلغ نهایی</td>
+        <td>{{ "{:,.0f}".format(total_after_discount)|fa }}</td>
+    </tr>
+</table>
+
+</div>
+
+    <div class="notes-box">
+
+        {% if description %}
+        <p>
+            <strong>توضیحات:</strong><br>
+            {{ description }}
+        </p>
+        {% endif %}
+
+        <p>
+            <strong>شماره کارت:</strong>
+            {{ card_number|fa }}
+			<span style= "margin-right: 40px;">
+			 <strong>بنام:</strong>
+            {{ card_number_name }}
+			</span>
+        </p>
+		
+
+    </div>
+
+</div>
+<div style="clear:both;"></div>
+<div class="signatures">
+    <div class="seller-sign">
+        امضاء فروشنده
+    </div>
+
+    <div class="buyer-sign">
+        امضاء خریدار
+    </div>
+</div>
+
+</body>
+</html>

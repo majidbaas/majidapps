@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}چک لیست سفر{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='icon.png') }}">
+</head>
+
+<body>
+
+<header class="main-header">
+    <div class="page-wrapper">
+        <div class="logo">🧾</div>
+
+        <div class="title">
+            <h1>سامانه ساخت چک لیست سفر</h1>
+            <span>هوشمند • ساده • قابل چاپ</span>
+        </div>
+    </div>
+</header>
+
+<div class="page-wrapper">
+
+    {% block stepper %}{% endblock %}
+
+    {% block content %}{% endblock %}
+
+</div>
+
+<!-- جاوااسکریپت اصلی -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<!-- جاوااسکریپت مخصوص هر صفحه -->
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

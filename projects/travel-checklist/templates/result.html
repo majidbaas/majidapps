@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  
+<header class="main-header">
+  <div class="page-wrapper">
+   
+    <div class="title">
+      <h1>سامانه ساخت چک لیست سفر 🧾</h1>
+      <span>هوشمند • ساده • قابل چاپ</span>
+    </div>
+  </div>
+</header>
+  
+  <title>نتیجه</title>
+  <link rel="stylesheet" href="/static/style.css">
+  
+  
+  
+</head>
+
+<body>
+<div class="stepper-container">
+  <div class="stepper-wrapper">
+
+    <div class="step">
+      <span class="circle">1</span>
+      <span class="label">فرم</span>
+    </div>
+
+    <span class="connector"></span>
+
+    <div class="step">
+      <span class="circle">2</span>
+      <span class="label">جزئیات</span>
+    </div>
+
+    <span class="connector"></span>
+
+    <div class="step active">
+      <span class="circle">3</span>
+      <span class="label">نتیجه</span>
+    </div>
+
+  </div>
+</div>
+
+  <div class="review-wrapper">
+    <h2>{{ title }}</h2>
+ 
+ 
+<div class="cards-container">
+
+{% for category, items in checklist.items() %}
+
+<div class="category-card">
+
+    <div class="card-title">
+        {{ category }}
+    </div>
+
+    <ul class="item-list">
+
+    {% for item in items %}
+
+        <li class="item-row">
+            <input type="checkbox">
+            <span>{{ item }}</span>
+        </li>
+
+    {% endfor %}
+
+    </ul>
+
+</div>
+
+{% endfor %}
+
+</div> 
+  </div>
+
+    <div class="actions-container"> {# wrapper جدید برای دکمه ها #}
+      <button class="print-btn" onclick="window.print()">چاپ 🖨</button>
+	  <button class="back-link" onclick="location.href='/';"> ⬅ بازگشت</button>
+	  <div class="back-home">
+	      <a href="http://localhost:5000/" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
+	  </div>
+    </div>
+
+  </div>
+
+
+<script src="/static/script.js"></script>
+<script>
+  window.addEventListener("load", () => {
+    setTimeout(() => setStep(3), 100);
+  });
+</script>
+</body>
+</html>

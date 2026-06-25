@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتایج پیشنهاد غذا</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍳 نتایج جستجو</h1>
+            <p class="subtitle">مواد وارد شده: <strong>{{ ingredients|join('، ') }}</strong></p>
+        </header>
+
+        <main>
+            {% if total_recipes == 0 %}
+                <div class="no-result">
+                    <p>😕 هیچ غذایی با این مواد پیدا نشد.</p>
+                    <p>سعی کن مواد بیشتری وارد کنی یا مواد دیگری امتحان کنی.</p>
+                    <a href="{{ url_for('index') }}" class="btn">بازگشت</a>
+                </div>
+            {% else %}
+                <p class="result-count">{{ total_recipes }} غذا پیدا شد:</p>
+                
+                <div class="recipes-grid">
+                    {% for recipe in results %}
+                    <div class="recipe-card">
+                        <div class="recipe-header">
+                            <h3>{{ recipe.name }}</h3>
+                            <span class="match-badge">تطابق {{ recipe.match_percent }}%</span>
+                        </div>
+                        
+                        <div class="recipe-details">
+                            <p><strong>⏱ زمان:</strong> {{ recipe.prep_time }} دقیقه</p>
+                            <p><strong>📊 سطح:</strong> {{ recipe.difficulty }}</p>
+                            
+                            <div class="ingredients-list">
+                                <strong>🧄 مواد اولیه:</strong>
+                                <ul>
+                                    {% for ing in recipe.ingredients %}
+                                        <li>{{ ing }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            
+                            {% if recipe.missing_ingredients %}
+                           <div class="missing-ingredients">
+								<strong>✅ مواد تکمیلی :</strong>
+								<ul>
+									{% for ing in recipe.missing_ingredients %}
+										<li>{{ ing }}</li>
+									{% endfor %}
+								</ul>
+								
+							</div>
+							
+                            {% endif %}
+                            
+                            <details>
+                                <summary>📖 طرز تهیه</summary>
+                                <p>{{ recipe.instructions }}</p>
+                            </details>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <footer>
+					<div class="footer-links">
+						<a href="{{ url_for('index') }}" class="btn-back">🔍 جستجوی مجدد</a>
+						<a href="http://localhost:5000/" class="btn-back">🏠 صفحه اصلی</a>
+					</div>
+				</footer>
+            {% endif %}
+        </main>
+
+        <footer>
+            <a href="/">بازگشت به صفحه اصلی</a>
+        </footer>
+    </div>
+</body>
+</html>

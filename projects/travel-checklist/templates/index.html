@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>چک لیست سفر</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+
+<header class="main-header">
+  <div class="page-wrapper">
+   
+    <div class="title">
+      <h1>سامانه ساخت چک لیست سفر 🧾</h1>
+      <span>هوشمند • ساده • قابل چاپ</span>
+    </div>
+  </div>
+</header>
+
+
+<div class="stepper-container">
+  <div class="stepper-wrapper">
+
+    <div class="step active">
+      <span class="circle">1</span>
+      <span class="label">فرم</span>
+    </div>
+
+    <span class="connector"></span>
+
+    <div class="step">
+      <span class="circle">2</span>
+      <span class="label">جزئیات</span>
+    </div>
+
+    <span class="connector"></span>
+
+    <div class="step">
+      <span class="circle">3</span>
+      <span class="label">نتیجه</span>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+  <div class="page-wrapper">
+    <h3 class="container wide">فرم ساخت چک لیست سفر</h3>
+
+    <form method="post">
+
+      <div class="form-grid">
+
+        <!-- نام -->
+        <div class="form-group">
+          <label for="name">👤 نام شما</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+			value="{{ form.name if form else '' }}"
+            placeholder="مثلاً مجید"
+            required
+          >
+        </div>
+
+        <!-- نوع سفر -->
+        <div class="form-group">
+          <label for="travel_type">نوع سفر</label>
+          <select id="travel_type" name="travel_type" required>
+            <option value="solo"
+			{% if form and form.travel_type == "solo" %}
+			selected{% endif %}>
+			انفرادی
+			</option>
+            <option value="family"
+			{% if form and form.travel_type == "family" %}
+			selected{% endif %}>
+			خانوادگی
+			</option>
+          </select>
+        </div>
+
+        <!-- محل اقامت -->
+        <div class="form-group">
+          <label for="hotel_type">🏨 محل اقامت</label>
+         <select id="hotel_type" name="hotel_type" required>
+<option value="">انتخاب کنید</option>
+<option value="hotel" {% if form and form.hotel_type=="hotel" %}selected{% endif %}> هتل
+</option>
+<option value="suite" {% if form and form.hotel_type=="suite" %}selected{% endif %}> سوئیت آپارتمان
+</option>
+<option value="hostel" {% if form and form.hotel_type=="hostel" %}selected{% endif %}> هاستل
+</option>
+<option value="camp" {% if form and form.hotel_type=="camp" %}selected{% endif %}> چادر کمپ
+</option>
+<option value="familyHome" {% if form and form.hotel_type=="familyHome" %}selected{% endif %}> منزل اقوام
+</option>
+<option value="eco" {% if form and form.hotel_type=="eco" %}selected{% endif %}> اقامتگاه بوم‌گردی
+</option>
+<option value="villa" {% if form and form.hotel_type=="villa" %}selected{% endif %}> ویلا
+</option>
+<option value="villa" {% if form and form.hotel_type=="my_villa" %}selected{% endif %}> ویلای یا آپارتمان شخصی
+</option>
+</select>
+        </div>
+
+        <!-- مسافران -->
+       <div class="form-group">
+		 <label>👨‍👩‍👧 مسافران</label>
+
+		 <div class="traveler-input" onclick="openTravelerModal()">
+			<span class="traveler-text">۱ بزرگسال</span>
+			<span class="edit-icon">✏️</span>
+		  </div>
+
+		  <input type="hidden" name="adult_count" id="adultInput" value="1">
+		  <input type="hidden" name="child_count" id="childInput" value="0">
+		</div>
+
+        <!-- بودجه -->
+        <div class="form-group">
+          <label for="budget">💰 سطح بودجه</label>
+          <select id="budget" name="budget" required>
+            <option value="">انتخاب کنید</option>
+            <option value="economic"
+ {% if form and form.budget == "economic" %}selected{% endif %}>
+ اقتصادی
+</option>
+
+<option value="medium"
+ {% if form and form.budget == "medium" %}selected{% endif %}>
+ متوسط
+</option>
+
+<option value="luxury"
+ {% if form and form.budget == "luxury" %}selected{% endif %}>
+ لاکچری
+</option>
+          </select>
+        </div>
+
+        <!-- مدت اقامت -->
+        <div class="form-group">
+          <label for="stay_days">⏱️ مدت اقامت (شب)</label>
+          <input
+            type="number"
+            id="stay_days"
+            name="stay_days"
+            min="1"
+            max="60"
+			value="{{ form.stay_days if form else '' }}"
+            required
+          >
+        </div>
+
+        <!-- وسیله سفر -->
+        <div class="form-group">
+          <label for="transport">🚗 وسیله سفر</label>
+          <select id="transport" name="transport" required>
+            <option value="plane">هواپیما</option>
+            <option value="train">قطار</option>
+            <option value="car">خودرو</option>
+            <option value="bus">اتوبوس</option>
+			<option value="motor">موتور</option>
+			<option value="taxi">تاکسی</option>
+			
+          </select>
+        </div>
+
+        <!-- فصل -->
+        <div class="form-group">
+          <label for="season">🌦 فصل سفر</label>
+          <select id="season" name="season" required>
+            <option value="spring">بهار</option>
+            <option value="summer">تابستان</option>
+            <option value="autumn">پاییز</option>
+            <option value="winter">زمستان</option>
+          </select>
+        </div>
+
+        <!-- نوع مقصد -->
+        <div class="form-group">
+          <label for="city-type">نوع مقصد</label>
+          <select
+            id="city-type"
+            name="city_type"
+            onchange="loadCities()"
+            required
+          >
+            <option value="">انتخاب کنید</option>
+           <option value="internal"
+ {% if form and form.city_type == "internal" %}selected{% endif %}>
+ داخلی
+</option>
+
+<option value="external"
+ {% if form and form.city_type == "external" %}selected{% endif %}>
+ خارجی
+</option>
+          </select>
+        </div>
+
+        <!-- شهر مقصد -->
+        <div class="form-group">
+          <label for="city">📍 شهر مقصد</label>
+          <select id="city" name="city_fa" required>
+            <option value="">-- انتخاب شهر --</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- ارسال -->
+      <div class="submit-wrapper">
+        <button class="submit-btn" type="submit">
+          ساخت چک لیست 🧾
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+
+{% if categories %}
+<hr style="margin:40px 0">
+
+<section class="container wide">
+  <h2>🧾 چک‌لیست پیشنهادی</h2>
+
+  {% for category in categories %}
+    <div class="checklist-category">
+      <h3>{{ category.title }}</h3>
+
+      <ul>
+        {% for item in category.items %}
+          <li>
+            <label>
+              <input type="checkbox">
+              {{ item.name }}
+            </label>
+
+            <span class="item-meta">
+              ({{ item.default_count }})
+              {% if item.description %}
+                – {{ item.description }}
+              {% endif %}
+            </span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+</section>
+
+{% endif %}
+
+
+
+
+  <!-- مودال مسافران -->
+<div id="travelerModal" class="modal-overlay" onclick="closeTravelerModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+
+    <h3>مسافران</h3>
+
+    <div class="counter-row">
+      <span class="label">بزرگسال</span>
+      <div class="counter">
+        <button type="button" onclick="changeCount('adult', 1)">+</button>
+        <span id="adultCount">1</span>
+        <button type="button" onclick="changeCount('adult', -1)">-</button>
+      </div>
+    </div>
+
+    <div class="counter-row">
+      <span class="label">کودک</span>
+      <div class="counter">
+        <button type="button" onclick="changeCount('child', 1)">+</button>
+        <span id="childCount">0</span>
+        <button type="button" onclick="changeCount('child', -1)">-</button>
+      </div>
+    </div>
+
+    <button type="button" class="submit-btn" onclick="applyTravelers()">
+      تأیید
+    </button>
+	<div class="back-home">
+		<a href="http://localhost:5000/" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
+	</div>
+
+  </div>
+</div>
+
+  <script src="/static/script.js"></script>
+  
+  <script>
+  window.onload = function() {
+    const cityType = "{{ form.city_type if form else '' }}";
+    const selectedCity = "{{ form.city_fa if form else '' }}";
+
+    if (cityType) {
+      loadCities();
+
+      // کمی صبر می‌کنیم تا شهرها لود شوند
+      setTimeout(function() {
+        document.getElementById("city").value = selectedCity;
+      }, 100);
+    }
+  }
+</script>
+
+
+<script src="/static/script.js"></script>
+<script>
+  window.addEventListener("load", () => {
+    setTimeout(() => setStep(1), 100);
+  });
+</script>
+
+</body>
+</html>
