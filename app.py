@@ -1,23 +1,35 @@
 from flask import Flask, render_template
+
 import os
 app = Flask(__name__)
+app.secret_key = "global_super_secret_key"
+
+# ===== ثبت Blueprintها =====
+# ===== ثبت Blueprintها =====
+from projects.travel.travel import travel_bp
+from projects.food.food import food_bp
+from projects.invoice.invoice import invoice_bp
+
+app.register_blueprint(travel_bp, url_prefix='/travel')
+app.register_blueprint(food_bp, url_prefix='/food')
+app.register_blueprint(invoice_bp, url_prefix='/invoice')
 
 # لیست پروژه‌ها (برای نمایش در صفحه اصلی)
 PROJECTS = [
-    {
-        "id": "travel-checklist",
+   {
+        "id": "travel",
         "title": "چک‌لیست سفر",
         "description": "برنامه‌ریزی سفر با انتخاب امکانات مورد نیاز",
         "status": "فعال",
-        "url": "http://localhost:5001/",  # ← این خط را عوض کن
+        "url": "/travel/",
         "icon": "🧳"
     },
-     {
-        "id": "food-recommender",
+    {
+        "id": "food",
         "title": "پیشنهاد غذا",
         "description": "بر اساس مواد اولیه موجود، غذا پیشنهاد بده",
-        "status": "فعال",  # تغییر از "در حال توسعه" به "فعال"
-        "url": "http://localhost:5002/",  # پورت ۵۰۰۲
+        "status": "فعال",
+        "url": "/food/",
         "icon": "🍳"
     },
     {
@@ -25,7 +37,7 @@ PROJECTS = [
         "title": "فاکتور ساز",
         "description": "ایجاد و مدیریت فاکتورهای ساده",
         "status": "فعال",
-        "url": "http://localhost:5003/",
+        "url": "/invoice/",
         "icon": "📄"
     },
     {
