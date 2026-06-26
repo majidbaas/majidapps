@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نتایج پیشنهاد غذا</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('food.static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
@@ -14,14 +14,14 @@
         </header>
 
         <main>
-            {% if total_recipes == 0 %}
+            {% if results|length == 0 %}
                 <div class="no-result">
                     <p>😕 هیچ غذایی با این مواد پیدا نشد.</p>
                     <p>سعی کن مواد بیشتری وارد کنی یا مواد دیگری امتحان کنی.</p>
-                    <a href="{{ url_for('index') }}" class="btn">بازگشت</a>
+                    <a href="{{ url_for('food.index') }}" class="btn">بازگشت</a>
                 </div>
             {% else %}
-                <p class="result-count">{{ total_recipes }} غذا پیدا شد:</p>
+                <p class="result-count">{{ results|length }} غذا پیدا شد:</p>
                 
                 <div class="recipes-grid">
                     {% for recipe in results %}
@@ -45,16 +45,14 @@
                             </div>
                             
                             {% if recipe.missing_ingredients %}
-                           <div class="missing-ingredients">
-								<strong>✅ مواد تکمیلی :</strong>
-								<ul>
-									{% for ing in recipe.missing_ingredients %}
-										<li>{{ ing }}</li>
-									{% endfor %}
-								</ul>
-								
-							</div>
-							
+                            <div class="missing-ingredients">
+                                <strong>✅ مواد تکمیلی پیشنهادی:</strong>
+                                <ul>
+                                    {% for ing in recipe.missing_ingredients %}
+                                        <li>{{ ing }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                             {% endif %}
                             
                             <details>
@@ -66,17 +64,14 @@
                     {% endfor %}
                 </div>
                 
-                <footer>
-					<div class="footer-links">
-						<a href="{{ url_for('index') }}" class="btn-back">🔍 جستجوی مجدد</a>
-						<a href="http://localhost:5000/" class="btn-back">🏠 صفحه اصلی</a>
-					</div>
-				</footer>
+                <div class="back-link">
+                    <a href="{{ url_for('food.index') }}" class="btn">جستجوی مجدد</a>
+                </div>
             {% endif %}
         </main>
 
         <footer>
-          <a href="/" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
+            <a href="/">🏠 بازگشت به صفحه اصلی</a>
         </footer>
     </div>
 </body>
