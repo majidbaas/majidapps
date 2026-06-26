@@ -20,7 +20,15 @@ travel_bp.secret_key = "1642300Mb"
 
 # ===== بارگذاری داده =====
 def load_data():
+    # مسیر فایل data.json را به صورت مطلق و بر اساس محل فایل travel.py بساز
     data_path = os.path.join(BASE_DIR, 'data.json')
+    
+    # این خط رو اضافه کن تا در لاگ سرور ببینی که مسیر چیست (برای دیباگ)
+    print(f"Looking for data.json at: {data_path}")
+    
+    if not os.path.exists(data_path):
+        raise Exception(f"DATA FILE NOT FOUND at {data_path}")
+    
     with open(data_path, encoding="utf-8") as f:
         return json.load(f)
 

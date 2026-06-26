@@ -13,11 +13,12 @@ food_bp.secret_key = "food_secret_2024"
 # ===== بارگذاری داده =====
 def load_recipes():
     data_path = os.path.join(BASE_DIR, 'data', 'recipes.json')
-    print(f"📂 Loading recipes from: {data_path}")
+    
+    # این خط رو اضافه کن
+    print(f"Looking for recipes.json at: {data_path}")
     
     if not os.path.exists(data_path):
-        print(f"❌ File not found: {data_path}")
-        return []
+        raise Exception(f"RECIPES FILE NOT FOUND at {data_path}")
     
     with open(data_path, encoding='utf-8') as f:
         recipes = json.load(f)['recipes']
