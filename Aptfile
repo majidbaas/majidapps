@@ -4,3 +4,5 @@ libharfbuzz-subset0
 libjpeg-dev
 libopenjp2-7-dev
 libffi-dev
+libcairo2
+libgdk-pixbuf2.0-0
