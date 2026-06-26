@@ -1,21 +1,13 @@
-from flask import Blueprint, render_template, request, make_response
-from weasyprint import HTML
+from flask import Blueprint, render_template, request
 import os
-
-print("📄 INVOICE BLUEPRINT LOADED")
 
 # ===== تنظیم مسیرها =====
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# ===== تعریف Blueprint به جای app =====
-invoice_bp = Blueprint(
-    'invoice', 
-    __name__,
-    template_folder=os.path.join(BASE_DIR, 'templates'),
-    static_folder=os.path.join(BASE_DIR, 'static')
-)
+invoice_bp = Blueprint('invoice', __name__, 
+                         template_folder=os.path.join(BASE_DIR, 'templates'), 
+                         static_folder=os.path.join(BASE_DIR, 'static'))
 
-# ===== کلید مخفی =====
 invoice_bp.secret_key = "invoice_secret"
 
 # ===== تابع تبدیل اعداد به فارسی =====
@@ -32,35 +24,36 @@ def fa_num(text):
 def fa_num_filter(text):
     return fa_num(text)
 
-# ===== صفحه اصلی =====
+# ===== صفحه اصلی (فرم) =====
 @invoice_bp.route("/", methods=["GET"])
 def form():
     return render_template("form.html")
 
-# ===== تولید فاکتور PDF =====
+# ===== نمایش فاکتور (بدون PDF) =====
 @invoice_bp.route("/invoice", methods=["POST"])
 def invoice():
+    # دریافت اطلاعات از فرم
     buyer = request.form.get("buyer")
     buyer_phone = request.form.get("buyer_phone")
-    
     seller = request.form.get("seller")
     seller_phone = request.form.get("seller_phone")
-
     invoice_number = request.form.get("invoice_number")
     invoice_date = request.form.get("date")
     description = request.form.get("notes")
-    discount = request.form.get("discount", "0")
-    discount = float(discount.replace(",", ""))
     card_number_name = request.form.get("card_number_name")
     seller_address = request.form.get("seller_address")
     buyer_address = request.form.get("buyer_address")
-    
     card_number = request.form.get("card_number")
-    vat_percent = float(
-        request.form.get("vat_percent", 0) or 0
-    )
+    
+    # تخفیف
+    discount = request.form.get("discount", "0")
+    discount = float(discount.replace(",", "")) if discount else 0
+    
+    # مالیات
+    vat_percent = float(request.form.get("vat_percent", 0) or 0)
     vat_enabled = request.form.get("vat_enabled") is not None
 
+    # اقلام
     titles = request.form.getlist("item[]")
     quantities = request.form.getlist("qty[]")
     prices = request.form.getlist("price[]")
@@ -69,11 +62,12 @@ def invoice():
     total_before_discount = 0
 
     for t, q, p in zip(titles, quantities, prices):
+        if t.strip() == "" or q == "" or p == "":
+            continue
         q = float(str(q).replace(",", ""))
         p = float(str(p).replace(",", ""))
         subtotal = q * p
         total_before_discount += subtotal
-
         items.append({
             "title": t,
             "quantity": q,
@@ -83,33 +77,28 @@ def invoice():
 
     total_discount = discount
 
-    if vat_enabled:
-        vat_amount = (
-            (total_before_discount - total_discount)
-            * vat_percent / 100
-        )
+    # محاسبه مالیات
+    if vat_enabled and vat_percent > 0:
+        vat_amount = ((total_before_discount - total_discount) * vat_percent / 100)
     else:
         vat_amount = 0
 
-    total_after_discount = (
-        total_before_discount
-        - total_discount
-        + vat_amount
-    )
-    
-    html = render_template(
+    total_after_discount = total_before_discount - total_discount + vat_amount
+
+    # رندر کردن فاکتور به صورت HTML
+    return render_template(
         "invoice.html",
-        buyer=buyer,
-        buyer_phone=buyer_phone,
-        buyer_address=buyer_address,
-        seller=seller,
-        seller_phone=seller_phone,
-        seller_address=seller_address,
-        invoice_number=invoice_number,
-        invoice_date=invoice_date,
-        description=description,
-        card_number=card_number,
-        card_number_name=card_number_name,
+        buyer=buyer or "-",
+        buyer_phone=buyer_phone or "-",
+        buyer_address=buyer_address or "-",
+        seller=seller or "-",
+        seller_phone=seller_phone or "-",
+        seller_address=seller_address or "-",
+        invoice_number=invoice_number or "-",
+        invoice_date=invoice_date or "-",
+        description=description or "-",
+        card_number=card_number or "-",
+        card_number_name=card_number_name or "-",
         items=items,
         total_before_discount=total_before_discount,
         total_discount=total_discount,
@@ -118,15 +107,7 @@ def invoice():
         vat_amount=vat_amount
     )
 
-    pdf = HTML(string=html).write_pdf()
-
-    response = make_response(pdf)
-    response.headers["Content-Type"] = "application/pdf"
-    response.headers["Content-Disposition"] = "inline; filename=invoice.pdf"
-
-    return response
-
-# ===== بخش تست لوکال (اختیاری) =====
+# ===== بخش تست لوکال =====
 if __name__ == '__main__':
     from flask import Flask
     app = Flask(__name__)

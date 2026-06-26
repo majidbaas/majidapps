@@ -4,237 +4,393 @@
     <meta charset="UTF-8">
     <title>فاکتور</title>
 
+    <!-- html2canvas برای تبدیل به تصویر -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
     <style>
         @font-face {
             font-family: "Vazir";
             src: url("https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/Vazir.ttf");
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             direction: rtl;
-            font-family: "Vazir";
+            font-family: "Vazir", Tahoma, sans-serif;
             font-size: 14px;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+
+        /* ===== کانتینر اصلی فاکتور ===== */
+        #invoice-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
         table {
             width: 100%;
-            border: 1px solid black;
-            border-spacing: 0;
+            border-collapse: collapse;
             margin-top: 15px;
         }
 
         th, td {
-            border: 1px solid black;
-            padding: 6px;
+            border: 1px solid #333;
+            padding: 8px 10px;
+            text-align: center;
         }
 
         th {
-            background: #eee;
+            background: #e9ecef;
+            font-weight: bold;
         }
-		.header {
-			width: 100%;
-			overflow: hidden;
-		}
 
-		.right {
-		margin-top: 85px;
-			float: right;
-		}
-		.title {
-			text-align: center;
-			width: 100%;
-			margin-bottom: 20px;
-		}
+        .header {
+            width: 100%;
+            overflow: hidden;
+        }
 
-		.left {
-			float: left;
-			text-align: left;
-		}
-		.summary-box{
-			border:1px solid #999;
-			width:50%;
-			float:left;
-			padding:0;
-			background:#fff;
-}
+        .right {
+            margin-top: 85px;
+            float: right;
+            text-align: right;
+        }
 
-.summary-table{
-    width:100%;
-   
-	 border: 1px solid black;
-    margin:0;
-}
+        .title {
+            text-align: center;
+            width: 100%;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #2c3e50;
+        }
 
-.summary-table td{
-    border-bottom:1px solid #ccc;
-	 border: 1px solid black;
-    padding:9px 5px;
-}
+        .left {
+            float: left;
+            text-align: left;
+        }
 
-.summary-table tr:last-child td{
-    border-bottom:none;
-    font-size:16px;
-    font-weight:bold;
-    background:#f5f5f5;
-}
-		.final-row {
-		   background-color: #d9edf7;
-		   font-size: 16px;
-		   font-weight: bold;
-		 
-		}
-		.bottom-section{
-		display:felx;
-		justify-content:space-between;
-    width:100%;
-    margin-top:8px;
-}
+        .summary-box {
+            border: 1px solid #999;
+            width: 50%;
+            float: left;
+            padding: 0;
+            background: #fff;
+        }
 
+        .summary-table {
+            width: 100%;
+            border: 1px solid black;
+            margin: 0;
+        }
 
+        .summary-table td {
+            border: 1px solid black;
+            padding: 9px 5px;
+        }
 
-.notes-box{
-    float:right;
-    width:100%;
-    min-height:120px;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-}
+        .summary-table tr:last-child td {
+            font-size: 16px;
+            font-weight: bold;
+            background: #d9edf7;
+        }
 
-.signatures{
-    margin-top:35px;
-}
+        .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
 
-.seller-sign{
-	margin-right: 30px;
-    float:right;
-}
+        .notes-box {
+            float: right;
+            width: 100%;
+            min-height: 120px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            margin-top: 10px;
+        }
 
-.buyer-sign{
-margin-left: 30px;
-    float:left;
-}
+        .signatures {
+            margin-top: 35px;
+            clear: both;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .seller-sign, .buyer-sign {
+            font-weight: bold;
+            border-top: 1px solid #333;
+            padding-top: 8px;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        /* ===== دکمه‌های عملیات ===== */
+        .actions {
+            max-width: 900px;
+            margin: 20px auto 0;
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.1s;
+            margin: 5px 8px;
+            font-family: "Vazir", Tahoma, sans-serif;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2e86c1;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        /* ===== مخفی کردن دکمه‌ها هنگام چاپ ===== */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white;
+                padding: 0;
+            }
+            #invoice-content {
+                box-shadow: none;
+                border-radius: 0;
+                padding: 20px;
+            }
+        }
+
+        /* ===== ریسپانسیو ===== */
+        @media (max-width: 700px) {
+            .right, .left {
+                float: none;
+                text-align: center;
+                margin-top: 10px;
+            }
+            .summary-box {
+                width: 100%;
+                float: none;
+            }
+            .bottom-section {
+                flex-direction: column;
+            }
+            .signatures {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                padding: 0;
+            }
+            .seller-sign, .buyer-sign {
+                width: 80%;
+            }
+            .btn {
+                display: block;
+                width: 90%;
+                margin: 8px auto;
+            }
+        }
     </style>
 </head>
 <body>
 
+<!-- ===== فاکتور ===== -->
+<div id="invoice-content">
 
-    
-        <h2 class="title">فاکتور فروش</h2>
-
+    <h2 class="title">📄 فاکتور فروش</h2>
 
     <div class="left">
         <p><strong>شماره فاکتور:</strong> {{ invoice_number|fa }}</p>
         <p><strong>تاریخ:</strong> {{ invoice_date|fa }}</p>
     </div>
-	 <div class="right">
-	<p><strong>فروشنده:</strong> {{ seller }}  
-	    <span style= "margin-right: 20px;">
-			<strong>شماره تلفن:</strong> 
-			{{ seller_phone | fa }}
-		</span>
-		<span style= "margin-right: 20px;">
-			<strong>آدرس:</strong> 
-			{{ seller_address }}
-		</span>
-			
-	</p>
 
-
-    <p><strong>خریدار:</strong> {{ buyer }}  
-		<span style= "margin-right: 20px;">
-			<strong>شماره تلفن:</strong> 
-			{{ buyer_phone | fa }}
-		</span>
-		<span style= "margin-right: 20px;">
-			<strong>آدرس:</strong> 
-			{{ buyer_address }}
-		</span>
-	</p>
-
-</div>
-
-
-
-<table>
-    <tr>
-        <th>شرح</th>
-        <th>تعداد</th>
-        <th>قیمت واحد</th>
-        <th>مبلغ</th>
-    </tr>
-
-    {% for item in items %}
-    <tr>
-        <td>{{ item.title }}</td>
-        <td>{{ "{:,.0f}".format(item.quantity)|fa }}</td>
-        <td>{{ "{:,.0f}".format(item.price)|fa }}</td>
-        <td>{{ "{:,.0f}".format(item.subtotal)|fa }}</td>
-    </tr>
-    {% endfor %}
-</table>
-
-<!-- اینجا جدول تمام شده -->
-
-<div class="bottom-section">
-
-    <div class="summary-box">
-
-<table class="summary-table">
-    <tr>
-        <td>جمع کل</td>
-        <td>{{ "{:,.0f}".format(total_before_discount)|fa }}</td>
-    </tr>
-
-    <tr>
-        <td>تخفیف</td>
-        <td>{{ "{:,.0f}".format(total_discount)|fa }}</td>
-    </tr>
-
-    <tr>
-        <td>مالیات</td>
-        <td>{{ "{:,.0f}".format(vat_amount)|fa }}</td>
-    </tr>
-
-    <tr>
-        <td>مبلغ نهایی</td>
-        <td>{{ "{:,.0f}".format(total_after_discount)|fa }}</td>
-    </tr>
-</table>
-
-</div>
-
-    <div class="notes-box">
-
-        {% if description %}
+    <div class="right">
         <p>
-            <strong>توضیحات:</strong><br>
-            {{ description }}
+            <strong>فروشنده:</strong> {{ seller }}  
+            <span style="margin-right: 20px;">
+                <strong>تلفن:</strong> {{ seller_phone|fa }}
+            </span>
+            <span style="margin-right: 20px;">
+                <strong>آدرس:</strong> {{ seller_address }}
+            </span>
         </p>
-        {% endif %}
-
         <p>
-            <strong>شماره کارت:</strong>
-            {{ card_number|fa }}
-			<span style= "margin-right: 40px;">
-			 <strong>بنام:</strong>
-            {{ card_number_name }}
-			</span>
+            <strong>خریدار:</strong> {{ buyer }}  
+            <span style="margin-right: 20px;">
+                <strong>تلفن:</strong> {{ buyer_phone|fa }}
+            </span>
+            <span style="margin-right: 20px;">
+                <strong>آدرس:</strong> {{ buyer_address }}
+            </span>
         </p>
-		
+    </div>
 
+    <div style="clear:both;"></div>
+
+    <table>
+        <tr>
+            <th>شرح</th>
+            <th>تعداد</th>
+            <th>قیمت واحد</th>
+            <th>مبلغ</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.title }}</td>
+            <td>{{ "{:,.0f}".format(item.quantity)|fa }}</td>
+            <td>{{ "{:,.0f}".format(item.price)|fa }}</td>
+            <td>{{ "{:,.0f}".format(item.subtotal)|fa }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="bottom-section">
+        <div class="summary-box">
+            <table class="summary-table">
+                <tr>
+                    <td>جمع کل</td>
+                    <td>{{ "{:,.0f}".format(total_before_discount)|fa }}</td>
+                </tr>
+                <tr>
+                    <td>تخفیف</td>
+                    <td>{{ "{:,.0f}".format(total_discount)|fa }}</td>
+                </tr>
+                <tr>
+                    <td>مالیات</td>
+                    <td>{{ "{:,.0f}".format(vat_amount)|fa }}</td>
+                </tr>
+                <tr>
+                    <td><strong>مبلغ نهایی</strong></td>
+                    <td><strong>{{ "{:,.0f}".format(total_after_discount)|fa }}</strong></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="notes-box">
+            {% if description and description != "-" %}
+            <p><strong>توضیحات:</strong><br>{{ description }}</p>
+            {% endif %}
+            <p>
+                <strong>شماره کارت:</strong> {{ card_number|fa }}
+                <span style="margin-right: 40px;">
+                    <strong>بنام:</strong> {{ card_number_name }}
+                </span>
+            </p>
+        </div>
+    </div>
+
+    <div style="clear:both;"></div>
+
+    <div class="signatures">
+        <div class="seller-sign">امضاء فروشنده</div>
+        <div class="buyer-sign">امضاء خریدار</div>
     </div>
 
 </div>
-<div style="clear:both;"></div>
-<div class="signatures">
-    <div class="seller-sign">
-        امضاء فروشنده
-    </div>
 
-    <div class="buyer-sign">
-        امضاء خریدار
-    </div>
+<!-- ===== دکمه‌های عملیات ===== -->
+<div class="actions no-print">
+    <button class="btn btn-success" onclick="downloadImage()">📥 دانلود به صورت تصویر</button>
+    <button class="btn btn-primary" onclick="window.print()">🖨️ چاپ</button>
+    <a href="/invoice" class="btn btn-secondary">🔙 بازگشت به فرم</a>
+    <a href="/" class="btn btn-danger">🏠 صفحه اصلی</a>
 </div>
+
+<!-- ===== اسکریپت تبدیل به تصویر ===== -->
+<script>
+    function downloadImage() {
+        const element = document.getElementById('invoice-content');
+        const btn = document.querySelector('.btn-success');
+        const originalText = btn.innerText;
+
+        // غیرفعال کردن دکمه و نمایش پیام
+        btn.innerText = '⏳ در حال پردازش...';
+        btn.disabled = true;
+
+        html2canvas(element, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            logging: false,
+            allowTaint: true,
+            width: element.scrollWidth,
+            height: element.scrollHeight,
+            windowWidth: element.scrollWidth,
+            windowHeight: element.scrollHeight
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `فاکتور-${new Date().toLocaleDateString('fa-IR')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }).catch(error => {
+            alert('❌ خطا در تبدیل به تصویر. لطفاً دوباره تلاش کنید.');
+            console.error('html2canvas error:', error);
+            btn.innerText = originalText;
+            btn.disabled = false;
+        });
+    }
+
+    // اطمینان از بارگذاری کامل فونت‌ها قبل از تبدیل
+    document.addEventListener('DOMContentLoaded', function() {
+        // در صورت نیاز، فونت‌ها را پیش‌بارگذاری کنید
+        console.log('فاکتور آماده است.');
+    });
+</script>
 
 </body>
 </html>
