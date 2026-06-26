@@ -8,11 +8,11 @@ app.secret_key = "global_super_secret_key"
 # ===== ثبت Blueprintها =====
 from projects.travel.travel import travel_bp
 from projects.food.food import food_bp
-from projects.invoice.invoice import invoice_bp
+#from projects.invoice.invoice import invoice_bp
 
 app.register_blueprint(travel_bp, url_prefix='/travel')
 app.register_blueprint(food_bp, url_prefix='/food')
-app.register_blueprint(invoice_bp, url_prefix='/invoice')
+#app.register_blueprint(invoice_bp, url_prefix='/invoice')
 
 # لیست پروژه‌ها (برای نمایش در صفحه اصلی)
 PROJECTS = [
@@ -24,14 +24,13 @@ PROJECTS = [
         "url": "/travel/",
         "icon": "🧳"
     },
-    {
-        "id": "food",
-        "title": "پیشنهاد غذا",
-        "description": "بر اساس مواد اولیه موجود، غذا پیشنهاد بده",
-        "status": "فعال",
-        "url": "/food/",
-        "icon": "🍳"
-    },
+ #   {
+  ##     "title": "پیشنهاد غذا",
+    #    "description": "بر اساس مواد اولیه موجود، غذا پیشنهاد بده",
+     #   "status": "فعال",
+      #  "url": "/food/",
+       # "icon": "🍳"
+   # },
     {
         "id": "invoice",
         "title": "فاکتور ساز",
