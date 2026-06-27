@@ -93,7 +93,7 @@ def result():
     
     if not recipes:
         return render_template(
-            'result.html',
+            'food_result.html',
             ingredients=ingredients,
             results=[],
             total_recipes=0,
@@ -103,7 +103,7 @@ def result():
     results = find_recipes_by_ingredients(ingredients, recipes)
     
     return render_template(
-        'result.html',
+        'food_result.html',
         ingredients=ingredients,
         results=results,
         total_recipes=len(results)

@@ -156,7 +156,7 @@ def result():
         checklist[category] = list(set(checklist[category]))
 
     return render_template(
-        "result.html",
+        "travel_result.html",
         checklist=checklist,
         title=title,
     )
