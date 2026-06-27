@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>فاکتور</title>
-
     <!-- html2canvas برای تبدیل به تصویر -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
@@ -35,6 +34,7 @@
             padding: 30px 35px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden; /* مهم برای floatها */
         }
 
         table {
@@ -54,23 +54,11 @@
             font-weight: bold;
         }
 
-        .header {
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .right {
-            margin-top: 85px;
-            float: right;
-            text-align: right;
-        }
-
         .title {
             text-align: center;
-            width: 100%;
-            margin-bottom: 20px;
             font-size: 24px;
             color: #2c3e50;
+            margin-bottom: 20px;
         }
 
         .left {
@@ -78,9 +66,29 @@
             text-align: left;
         }
 
+        .right {
+            float: right;
+            text-align: right;
+            margin-top: 85px;
+        }
+
+        /* ===== تمیز کردن floatها ===== */
+        .clearfix::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* ===== بخش جمع و توضیحات (چیدمان نهایی) ===== */
+        .bottom-section {
+            width: 100%;
+            margin-top: 20px;
+            overflow: hidden; /* جلوگیری از سرریز */
+        }
+
         .summary-box {
-            flex: 1 1 45%;
-            min-width: 250px;
+            width: 50%;
+            float: left; /* ← جدول جمع در چپ */
             border: 1px solid #999;
             background: #fff;
         }
@@ -96,39 +104,51 @@
             padding: 9px 5px;
         }
 
+        .summary-table td:last-child {
+            text-align: left;
+            direction: ltr;
+        }
+
+        .summary-table td:first-child {
+            text-align: right;
+            font-weight: bold;
+        }
+
         .summary-table tr:last-child td {
             font-size: 16px;
             font-weight: bold;
             background: #d9edf7;
         }
 
-        .bottom-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-       .notes-box {
-            flex: 1 1 45%;
-            min-width: 200px;
+        .notes-box {
+            width: 47%;
+            float: right; /* ← توضیحات در راست */
             word-wrap: break-word;
             overflow-wrap: break-word;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            box-sizing: border-box;
+            min-height: 120px;
         }
 
-
-       .signatures {
+        .signatures {
             margin-top: 35px;
             clear: both;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 30px;
+            overflow: hidden;
         }
 
-        .seller-sign, .buyer-sign {
+        .seller-sign {
+            float: right;
+            font-weight: bold;
+            border-top: 1px solid #333;
+            padding-top: 8px;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .buyer-sign {
+            float: left;
             font-weight: bold;
             border-top: 1px solid #333;
             padding-top: 8px;
@@ -161,86 +181,28 @@
             font-family: "Vazir", Tahoma, sans-serif;
         }
 
-        .btn:active {
-            transform: scale(0.97);
-        }
+        .btn-success { background: #27ae60; color: white; }
+        .btn-success:hover { background: #219a52; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2e86c1; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-danger:hover { background: #c0392b; }
 
-        .btn-success {
-            background: #27ae60;
-            color: white;
-        }
-        .btn-success:hover {
-            background: #219a52;
-        }
-
-        .btn-primary {
-            background: #3498db;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #2e86c1;
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-
-        /* ===== مخفی کردن دکمه‌ها هنگام چاپ ===== */
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white;
-                padding: 0;
-            }
-            #invoice-content {
-                box-shadow: none;
-                border-radius: 0;
-                padding: 20px;
-            }
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; }
+            #invoice-content { box-shadow: none; border-radius: 0; padding: 20px; }
         }
 
-        /* ===== ریسپانسیو ===== */
         @media (max-width: 700px) {
-            .right, .left {
-                float: none;
-                text-align: center;
-                margin-top: 10px;
-            }
-            .summary-box {
-                width: 100%;
-                float: none;
-            }
-            .bottom-section {
-                flex-direction: column;
-            }
-            .signatures {
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-                padding: 0;
-            }
-            .seller-sign, .buyer-sign {
-                width: 80%;
-            }
-            .btn {
-                display: block;
-                width: 90%;
-                margin: 8px auto;
-            }
+            .right, .left { float: none; text-align: center; margin-top: 10px; }
+            .summary-box, .notes-box { width: 100%; float: none; }
+            .bottom-section { flex-direction: column; }
+            .signatures { flex-direction: column; align-items: center; gap: 20px; }
+            .seller-sign, .buyer-sign { width: 80%; float: none; margin: 0 auto; }
+            .btn { display: block; width: 90%; margin: 8px auto; }
         }
     </style>
 </head>
@@ -259,26 +221,19 @@
     <div class="right">
         <p>
             <strong>فروشنده:</strong> {{ seller }}  
-            <span style="margin-right: 20px;">
-                <strong>تلفن:</strong> {{ seller_phone|fa }}
-            </span>
-            <span style="margin-right: 20px;">
-                <strong>آدرس:</strong> {{ seller_address }}
-            </span>
+            <span style="margin-right: 20px;"><strong>تلفن:</strong> {{ seller_phone|fa }}</span>
+            <span style="margin-right: 20px;"><strong>آدرس:</strong> {{ seller_address }}</span>
         </p>
         <p>
             <strong>خریدار:</strong> {{ buyer }}  
-            <span style="margin-right: 20px;">
-                <strong>تلفن:</strong> {{ buyer_phone|fa }}
-            </span>
-            <span style="margin-right: 20px;">
-                <strong>آدرس:</strong> {{ buyer_address }}
-            </span>
+            <span style="margin-right: 20px;"><strong>تلفن:</strong> {{ buyer_phone|fa }}</span>
+            <span style="margin-right: 20px;"><strong>آدرس:</strong> {{ buyer_address }}</span>
         </p>
     </div>
 
     <div style="clear:both;"></div>
 
+    <!-- جدول اصلی کالاها -->
     <table>
         <tr>
             <th>شرح</th>
@@ -296,25 +251,14 @@
         {% endfor %}
     </table>
 
+    <!-- ===== بخش جمع و توضیحات (چیدمان درست) ===== -->
     <div class="bottom-section">
         <div class="summary-box">
             <table class="summary-table">
-                <tr>
-                    <td>جمع کل</td>
-                    <td>{{ "{:,.0f}".format(total_before_discount)|fa }}</td>
-                </tr>
-                <tr>
-                    <td>تخفیف</td>
-                    <td>{{ "{:,.0f}".format(total_discount)|fa }}</td>
-                </tr>
-                <tr>
-                    <td>مالیات</td>
-                    <td>{{ "{:,.0f}".format(vat_amount)|fa }}</td>
-                </tr>
-                <tr>
-                    <td><strong>مبلغ نهایی</strong></td>
-                    <td><strong>{{ "{:,.0f}".format(total_after_discount)|fa }}</strong></td>
-                </tr>
+                <tr><td>جمع کل</td><td>{{ "{:,.0f}".format(total_before_discount)|fa }}</td></tr>
+                <tr><td>تخفیف</td><td>{{ "{:,.0f}".format(total_discount)|fa }}</td></tr>
+                <tr><td>مالیات</td><td>{{ "{:,.0f}".format(vat_amount)|fa }}</td></tr>
+                <tr><td><strong>مبلغ نهایی</strong></td><td><strong>{{ "{:,.0f}".format(total_after_discount)|fa }}</strong></td></tr>
             </table>
         </div>
 
@@ -324,15 +268,14 @@
             {% endif %}
             <p>
                 <strong>شماره کارت:</strong> {{ card_number|fa }}
-                <span style="margin-right: 40px;">
-                    <strong>بنام:</strong> {{ card_number_name }}
-                </span>
+                <span style="margin-right: 40px;"><strong>بنام:</strong> {{ card_number_name }}</span>
             </p>
         </div>
     </div>
 
     <div style="clear:both;"></div>
 
+    <!-- امضاها -->
     <div class="signatures">
         <div class="seller-sign">امضاء فروشنده</div>
         <div class="buyer-sign">امضاء خریدار</div>
@@ -355,12 +298,11 @@
         const btn = document.querySelector('.btn-success');
         const originalText = btn.innerText;
 
-        // غیرفعال کردن دکمه و نمایش پیام
         btn.innerText = '⏳ در حال پردازش...';
         btn.disabled = true;
 
         html2canvas(element, {
-            scale: 2,
+            scale: 3, // کیفیت بالا
             useCORS: true,
             backgroundColor: '#ffffff',
             logging: false,
@@ -374,7 +316,6 @@
             link.download = `فاکتور-${new Date().toLocaleDateString('fa-IR')}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
-
             btn.innerText = originalText;
             btn.disabled = false;
         }).catch(error => {
@@ -385,9 +326,7 @@
         });
     }
 
-    // اطمینان از بارگذاری کامل فونت‌ها قبل از تبدیل
     document.addEventListener('DOMContentLoaded', function() {
-        // در صورت نیاز، فونت‌ها را پیش‌بارگذاری کنید
         console.log('فاکتور آماده است.');
     });
 </script>
