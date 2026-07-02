@@ -301,7 +301,46 @@
 </div>
 
   <script src="/static/script.js"></script>
-  
+
+<script>
+let adult = 1;
+let child = 0;
+
+function openTravelerModal() {
+  document.getElementById("travelerModal").classList.add("active");
+}
+
+function closeTravelerModal() {
+  document.getElementById("travelerModal").classList.remove("active");
+}
+
+function changeCount(type, value) {
+  if (type === "adult") {
+    adult = Math.max(1, adult + value);
+    document.getElementById("adultCount").innerText = adult;
+  } else {
+    child = Math.max(0, child + value);
+    document.getElementById("childCount").innerText = child;
+  }
+}
+function applyTravelers() {
+  const textEl = document.querySelector(".traveler-text");
+
+  if (!textEl) {
+    console.error("traveler-text not found");
+    return;
+  }
+
+  textEl.innerText =
+    adult + " بزرگسال" + (child ? "، " + child + " کودک" : "");
+
+  document.getElementById("adultInput").value = adult;
+  document.getElementById("childInput").value = child;
+
+  closeTravelerModal();
+}
+
+</script>
   <script>
   window.onload = function() {
     const cityType = "{{ form.city_type if form else '' }}";
