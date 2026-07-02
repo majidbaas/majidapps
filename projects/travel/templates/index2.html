@@ -225,9 +225,11 @@
           ساخت چک لیست 🧾
         </button>
       </div>
-
+	  <div class="back-home">
+        <a href="/" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
+      </div>
     </form>
-  </div>
+     </div>
 
 
 {% if categories %}
@@ -341,7 +343,7 @@ function applyTravelers() {
 }
 
 </script>
-  <script>
+<script>
   window.onload = function() {
     const cityType = "{{ form.city_type if form else '' }}";
     const selectedCity = "{{ form.city_fa if form else '' }}";
@@ -357,7 +359,78 @@ function applyTravelers() {
   }
 </script>
 
+<script>
 
+document.addEventListener("DOMContentLoaded", function () {
+  const travelTypeSelect = document.querySelector('select[name="travel_type"]');
+  const travelerInput = document.querySelector(".traveler-input");
+
+  if (!travelTypeSelect || !travelerInput) return;
+
+  function toggleTravelerInput() {
+    if (travelTypeSelect.value === "solo") {
+      travelerInput.classList.add("disabled");
+      travelerInput.style.pointerEvents = "none";
+      travelerInput.style.opacity = "0.5";
+
+      document.getElementById("adultInput").value = 1;
+      document.getElementById("childInput").value = 0;
+      document.getElementById("adultCount").innerText = 1;
+      document.getElementById("childCount").innerText = 0;
+
+      document.querySelector(".traveler-text").innerText = "1 بزرگسال";
+    } else {
+      travelerInput.classList.remove("disabled");
+      travelerInput.style.pointerEvents = "auto";
+      travelerInput.style.opacity = "1";
+    }
+  }
+
+  travelTypeSelect.addEventListener("change", toggleTravelerInput);
+  toggleTravelerInput();
+});
+</script>
+<script>
+const cities = {
+  internal: ["تهران", "مشهد", "شیراز", "کیش", "اصفهان", "بندرعباس", "قشم", "آبادان"],
+  external: ["استانبول", "دبی", "تفلیس", "وان", "ایروان", "باتومی", "آنکارا"]
+};
+
+function loadCities() {
+  const type = document.getElementById("city-type").value;
+  const citySelect = document.getElementById("city");
+
+  citySelect.innerHTML = '<option value="">-- انتخاب شهر --</option>';
+  if (!type) return;
+
+  cities[type].forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    citySelect.appendChild(opt);
+  });
+}
+</script>
+
+
+
+
+<script>
+function loadCities() {
+  const type = document.getElementById("city-type").value;
+  const citySelect = document.getElementById("city");
+
+  citySelect.innerHTML = '<option value="">-- انتخاب شهر --</option>';
+  if (!type) return;
+
+  cities[type].forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    citySelect.appendChild(opt);
+  });
+}
+</script>
 <script src="/static/script.js"></script>
 <script>
   window.addEventListener("load", () => {
