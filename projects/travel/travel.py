@@ -11,18 +11,15 @@ travel_bp = Blueprint('travel', __name__,
                          
                
 
-travel_bp.secret_key = "1642300Mb"
 
 # ===== بارگذاری داده =====
 def load_data():
     # مسیر فایل data.json را به صورت مطلق و بر اساس محل فایل travel.py بساز
     data_path = os.path.join(BASE_DIR, 'data.json')
     
-    # این خط رو اضافه کن تا در لاگ سرور ببینی که مسیر چیست (برای دیباگ)
-    print(f"Looking for data.json at: {data_path}")
     
     if not os.path.exists(data_path):
-        raise Exception(f"DATA FILE NOT FOUND at {data_path}")
+        raise FileNotFoundError(f"DATA FILE NOT FOUND at {data_path}")
     
     with open(data_path, encoding="utf-8") as f:
         return json.load(f)
@@ -57,16 +54,21 @@ def generate_checklist(form):
 # ===== صفحه اصلی =====
 @travel_bp.route("/", methods=["GET", "POST"])
 def index():
+
     if request.method == "POST":
         session["form"] = request.form.to_dict()
-    return redirect("/travel/review")   
-    return render_template("index2.html", form=session.get("form"))
+        return redirect(url_for("travel.review"))
+
+    return render_template(
+        "index2.html",
+        form=session.get("form")
+    )
 # ===== صفحه بررسی =====
 @travel_bp.route("/review", methods=["GET"])
 def review():
     form = session.get("form")
     if not form:
-        return redirect("/travel/")
+        return redirect(url_for("travel.index"))
     trip_type_map = {
         "solo": "انفرادی",
         "family": "خانوادگی"
@@ -101,7 +103,7 @@ def review():
 def result():
     form = session.get("form")
     if not form:
-        return redirect("/travel/")
+        return redirect(url_for("travel.index"))
 
     travel_type_fa = {
         "solo": "به‌صورت انفرادی",
@@ -125,31 +127,31 @@ def result():
         "winter": "در زمستان"
     }
 
-    name = form.get("name")
+    name = form.get("name") or "کاربر"
     travel_type = form.get("travel_type")
     transport = form.get("transport")
     season = form.get("season")
-    city = form.get("city_fa")
+    city = form.get("city_fa") or ""
 
     try:
         stay_days = int(form.get("stay_days", 1))
-    except:
+    except (TypeError, ValueError):
         stay_days = 1
 
     checklist = generate_checklist(form)
 
     title = (
         f"چک‌لیست سفر {name} "
-        f"{travel_type_fa.get(travel_type)} "
-        f"{transport_fa.get(transport)} "
-        f"{season_fa.get(season)} "
+        f"{travel_type_fa.get(travel_type , travel_type)} "
+        f"{transport_fa.get(transport, transport)} "
+        f"{season_fa.get(season, season)} "
         f"به {city} ({stay_days} شب اقامت)"
     )
 
     session.pop("form", None)
 
     for category in checklist:
-        checklist[category] = list(set(checklist[category]))
+        checklist[category] = list(dict.fromkeys(checklist[category]))
 
     return render_template(
         "travel_result.html",
