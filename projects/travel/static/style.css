@@ -646,3 +646,7 @@ margin-bottom: 20px;
     width:18px;
     height:18px;
 }
+.disabled{
+    pointer-events:none;
+    opacity:.5;
+}

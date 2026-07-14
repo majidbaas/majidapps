@@ -1,26 +1,40 @@
+// =========================
+// Cities
+// =========================
 const cities = {
   internal: ["تهران", "مشهد", "شیراز", "کیش", "اصفهان", "بندرعباس", "قشم", "آبادان"],
   external: ["استانبول", "دبی", "تفلیس", "وان", "ایروان", "باتومی", "آنکارا"]
 };
 
-function loadCities() {
-  const type = document.getElementById("city-type").value;
-  const citySelect = document.getElementById("city");
+function loadCities(selectedCity = "") {
 
-  citySelect.innerHTML = '<option value="">-- انتخاب شهر --</option>';
-  if (!type) return;
+    const type = document.getElementById("city-type").value;
+    const citySelect = document.getElementById("city");
 
-  cities[type].forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c;
-    citySelect.appendChild(opt);
-  });
+    citySelect.innerHTML = '<option value="">-- انتخاب شهر --</option>';
+
+    if (!type || !cities[type]) return;
+
+    cities[type].forEach(city => {
+
+        const option = document.createElement("option");
+
+        option.value = city;
+        option.textContent = city;
+
+        if (city === selectedCity) {
+            option.selected = true;
+        }
+
+        citySelect.appendChild(option);
+
+    });
+
 }
 
 // ---------- Travelers ----------
-let adult = 1;
-let child = 0;
+let adult = parseInt(document.getElementById("adultInput").value) || 1;
+let child = parseInt(document.getElementById("childInput").value) || 0;
 
 function openTravelerModal() {
   document.getElementById("travelerModal").classList.add("active");
@@ -42,10 +56,9 @@ function changeCount(type, value) {
 function applyTravelers() {
   const textEl = document.querySelector(".traveler-text");
 
-  if (!textEl) {
-    console.error("traveler-text not found");
-    return;
-  }
+  
+   if (!textEl) return;
+  
 
   textEl.innerText =
     adult + " بزرگسال" + (child ? "، " + child + " کودک" : "");
@@ -109,7 +122,9 @@ if (formData.hotel_type === "familyHome") {
 
   return checklist;
 }
-
+// =========================
+// Travelers
+// =========================
 // غیرفعال‌سازی مسافران در سفر انفرادی
 document.addEventListener("DOMContentLoaded", function () {
   const travelTypeSelect = document.querySelector('select[name="travel_type"]');
@@ -120,8 +135,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function toggleTravelerInput() {
     if (travelTypeSelect.value === "solo") {
       travelerInput.classList.add("disabled");
-      travelerInput.style.pointerEvents = "none";
-      travelerInput.style.opacity = "0.5";
+	  
+     
 
       document.getElementById("adultInput").value = 1;
       document.getElementById("childInput").value = 0;
@@ -131,8 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelector(".traveler-text").innerText = "1 بزرگسال";
     } else {
       travelerInput.classList.remove("disabled");
-      travelerInput.style.pointerEvents = "auto";
-      travelerInput.style.opacity = "1";
+   
     }
   }
 
@@ -141,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
+// Stepper
 
 function setStep(stepNumber) {
   const steps = document.querySelectorAll('.step');

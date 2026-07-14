@@ -209,10 +209,33 @@
         <div class="form-group">
           <label for="season">🌦 فصل سفر</label>
           <select id="season" name="season" required>
-            <option value="spring">بهار</option>
-            <option value="summer">تابستان</option>
-            <option value="autumn">پاییز</option>
-            <option value="winter">زمستان</option>
+            <option value="spring"
+			{% if form and form.season == "spring" %}
+			selected
+			{% endif %}>
+			بهار
+			</option>
+
+			<option value="summer"
+			{% if form and form.season == "summer" %}
+			selected
+			{% endif %}>
+			تابستان
+			</option>
+
+			<option value="autumn"
+			{% if form and form.season == "autumn" %}
+			selected
+			{% endif %}>
+			پاییز
+			</option>
+
+			<option value="winter"
+			{% if form and form.season == "winter" %}
+			selected
+			{% endif %}>
+			زمستان
+			</option>
           </select>
         </div>
 
@@ -255,7 +278,7 @@
         </button>
       </div>
 	  <div class="back-home">
-        <a href="/" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
+       <a href="{{ url_for('home') }}" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
       </div>
     </form>
      </div>
