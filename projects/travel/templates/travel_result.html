@@ -3,8 +3,19 @@
 
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ title }}</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('travel.static', filename='style.css') }}">
+</head>
+
+
+
+<body>
+
 <header class="main-header">
   <div class="page-wrapper">
    
@@ -14,15 +25,7 @@
     </div>
   </div>
 </header>
-  
-  <title>نتیجه</title>
-  <link rel="stylesheet" href="/static/style.css">
-  
-  
-  
-</head>
 
-<body>
 <div class="stepper-container">
   <div class="stepper-wrapper">
 
@@ -82,18 +85,25 @@
 </div> 
   </div>
 
-    <div class="actions-container"> {# wrapper جدید برای دکمه ها #}
+    <div class="actions-container">  
       <button class="print-btn" onclick="window.print()">چاپ 🖨</button>
-	  <button class="back-link" onclick="location.href='/';"> ⬅ بازگشت</button>
+	  <button
+		type="button"
+		class="back-link"
+		onclick="location.href='{{ url_for('travel.index') }}'">
+		✏️ ویرایش اطلاعات
+		</button>
 	  <div class="back-home">
-	      <a href="http://localhost:5000/" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
+	      <a href="{{ url_for('home') }}" class="btn-back">
+			🏠 بازگشت به صفحه اصلی
+			</a>
 	  </div>
     </div>
 
-  </div>
+  
 
 
-<script src="/static/script.js"></script>
+<script src="{{ url_for('travel.static', filename='script.js') }}"></script>
 <script>
   window.addEventListener("load", () => {
     setTimeout(() => setStep(3), 100);

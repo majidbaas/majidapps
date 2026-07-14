@@ -131,7 +131,7 @@ def result():
     travel_type = form.get("travel_type")
     transport = form.get("transport")
     season = form.get("season")
-    city = form.get("city_fa") or ""
+    city = form.get("city_fa", "")
 
     try:
         stay_days = int(form.get("stay_days", 1))
@@ -142,9 +142,9 @@ def result():
 
     title = (
         f"چک‌لیست سفر {name} "
-        f"{travel_type_fa.get(travel_type , travel_type)} "
-        f"{transport_fa.get(transport, transport)} "
-        f"{season_fa.get(season, season)} "
+        f"{travel_type_fa.get(travel_type , "")} "
+        f"{transport_fa.get(transport, "")} "
+        f"{season_fa.get(season, "")} "
         f"به {city} ({stay_days} شب اقامت)"
     )
 

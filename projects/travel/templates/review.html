@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>چک لیست سفر</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet"
+      href="{{ url_for('travel.static', filename='style.css') }}">
 </head>
 
 <body>
@@ -54,36 +55,42 @@
 
   <div class="summary-grid">
  
-    <div><strong>نام:</strong> {{ form.name }}</div>
-   <p><strong>نوع سفر:</strong> {{ travel_type }}</p>
+   <div><strong>نام:</strong> {{ form.name }}</div>
+   <div><strong>نوع سفر:</strong> {{ travel_type }}</div>
    <div><strong>مقصد:</strong> {{ form.city_fa }}</div>
-   <p><strong>محل اقامت:</strong> {{ accommodation  }}</p>
+   <div><strong>محل اقامت:</strong> {{ accommodation  }}</div>
    <div><strong>مدت اقامت:</strong> {{ form.stay_days }} شب</div>
   </div>
 
 
-  <form action="/result" method="post">
+  <form action="{{ url_for('travel.result') }}" method="post">
   <button type="submit" class="submit-btn">
      تأیید و ساخت چک لیست
 	 </button>
 	
-  <div class="back-home">
-    <a href="http://localhost:5000/" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
-</div>
+  
 </form> 
+<div class="back-home">
+   <a href="{{ url_for('home') }}" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
+</div>
 
+<button
+type="button"
+class="back-link"
+onclick="location.href='{{ url_for('travel.index') }}'">
+✏️ ویرایش اطلاعات
+</button>
 
- <button class="back-link" onclick="location.href='/';"> ✏️ ویرایش اطلاعات</button>
-
-   
+ </div>  
 	
 	
-<script src="/static/script.js"></script>
+<script src="{{ url_for('travel.static', filename='script.js') }}"></script>
 <script>
   window.addEventListener("load", () => {
     setTimeout(() => setStep(2), 100);
   });
 </script>
 
-</div>
+
 </body>
+</html>
