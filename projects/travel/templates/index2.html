@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>چک لیست سفر</title>
- <link rel="stylesheet" href="/travel/static/style.css">
-
+<link rel="stylesheet" href="{{ url_for('travel.static', filename='style.css') }}">
 </head>
 
 <body>
@@ -108,7 +107,7 @@
 </option>
 <option value="villa" {% if form and form.hotel_type=="villa" %}selected{% endif %}> ویلا
 </option>
-<option value="villa" {% if form and form.hotel_type=="my_villa" %}selected{% endif %}> ویلای یا آپارتمان شخصی
+<option value="my_villa" {% if form and form.hotel_type=="my_villa" %}selected{% endif %}> ویلای یا آپارتمان شخصی
 </option>
 </select>
         </div>
@@ -166,12 +165,42 @@
         <div class="form-group">
           <label for="transport">🚗 وسیله سفر</label>
           <select id="transport" name="transport" required>
-            <option value="plane">هواپیما</option>
-            <option value="train">قطار</option>
-            <option value="car">خودرو</option>
-            <option value="bus">اتوبوس</option>
-			<option value="motor">موتور</option>
-			<option value="taxi">تاکسی</option>
+           <option value="plane"
+			{% if form and form.transport == "plane" %}
+			selected
+			{% endif %}>
+			هواپیما
+			</option>
+			<option value="train"
+			{% if form and form.transport == "train" %}
+			selected
+			{% endif %}>
+			قطار
+			</option>
+			<option value="car"
+			{% if form and form.transport == "car" %}
+			selected
+			{% endif %}>
+			خودرو
+			</option>
+			<option value="bus"
+			{% if form and form.transport == "bus" %}
+			selected
+			{% endif %}>
+			اتوبوس
+			</option>
+			<option value="motor"
+			{% if form and form.transport == "motor" %}
+			selected
+			{% endif %}>
+			موتور
+			</option>
+			<option value="taxi"
+			{% if form and form.transport == "taxi" %}
+			selected
+			{% endif %}>
+			تاکسی
+			</option>
 			
           </select>
         </div>
@@ -296,147 +325,16 @@
       تأیید
     </button>
 	<div class="back-home">
-		<a href="http://localhost:5000/" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
+		<a href="{{ url_for('home') }}" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
 	</div>
 
   </div>
 </div>
 
-  <script src="/static/script.js"></script>
+ 
 
-<script>
-let adult = 1;
-let child = 0;
+<script src="{{ url_for('travel.static', filename='script.js') }}"></script>
 
-function openTravelerModal() {
-  document.getElementById("travelerModal").classList.add("active");
-}
-
-function closeTravelerModal() {
-  document.getElementById("travelerModal").classList.remove("active");
-}
-
-function changeCount(type, value) {
-  if (type === "adult") {
-    adult = Math.max(1, adult + value);
-    document.getElementById("adultCount").innerText = adult;
-  } else {
-    child = Math.max(0, child + value);
-    document.getElementById("childCount").innerText = child;
-  }
-}
-function applyTravelers() {
-  const textEl = document.querySelector(".traveler-text");
-
-  if (!textEl) {
-    console.error("traveler-text not found");
-    return;
-  }
-
-  textEl.innerText =
-    adult + " بزرگسال" + (child ? "، " + child + " کودک" : "");
-
-  document.getElementById("adultInput").value = adult;
-  document.getElementById("childInput").value = child;
-
-  closeTravelerModal();
-}
-
-</script>
-<script>
-  window.onload = function() {
-    const cityType = "{{ form.city_type if form else '' }}";
-    const selectedCity = "{{ form.city_fa if form else '' }}";
-
-    if (cityType) {
-      loadCities();
-
-      // کمی صبر می‌کنیم تا شهرها لود شوند
-      setTimeout(function() {
-        document.getElementById("city").value = selectedCity;
-      }, 100);
-    }
-  }
-</script>
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function () {
-  const travelTypeSelect = document.querySelector('select[name="travel_type"]');
-  const travelerInput = document.querySelector(".traveler-input");
-
-  if (!travelTypeSelect || !travelerInput) return;
-
-  function toggleTravelerInput() {
-    if (travelTypeSelect.value === "solo") {
-      travelerInput.classList.add("disabled");
-      travelerInput.style.pointerEvents = "none";
-      travelerInput.style.opacity = "0.5";
-
-      document.getElementById("adultInput").value = 1;
-      document.getElementById("childInput").value = 0;
-      document.getElementById("adultCount").innerText = 1;
-      document.getElementById("childCount").innerText = 0;
-
-      document.querySelector(".traveler-text").innerText = "1 بزرگسال";
-    } else {
-      travelerInput.classList.remove("disabled");
-      travelerInput.style.pointerEvents = "auto";
-      travelerInput.style.opacity = "1";
-    }
-  }
-
-  travelTypeSelect.addEventListener("change", toggleTravelerInput);
-  toggleTravelerInput();
-});
-</script>
-<script>
-const cities = {
-  internal: ["تهران", "مشهد", "شیراز", "کیش", "اصفهان", "بندرعباس", "قشم", "آبادان"],
-  external: ["استانبول", "دبی", "تفلیس", "وان", "ایروان", "باتومی", "آنکارا"]
-};
-
-function loadCities() {
-  const type = document.getElementById("city-type").value;
-  const citySelect = document.getElementById("city");
-
-  citySelect.innerHTML = '<option value="">-- انتخاب شهر --</option>';
-  if (!type) return;
-
-  cities[type].forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c;
-    citySelect.appendChild(opt);
-  });
-}
-</script>
-
-
-
-
-<script>
-function loadCities() {
-  const type = document.getElementById("city-type").value;
-  const citySelect = document.getElementById("city");
-
-  citySelect.innerHTML = '<option value="">-- انتخاب شهر --</option>';
-  if (!type) return;
-
-  cities[type].forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.textContent = c;
-    citySelect.appendChild(opt);
-  });
-}
-</script>
-<script src="/static/script.js"></script>
-<script>
-  window.addEventListener("load", () => {
-    setTimeout(() => setStep(1), 100);
-  });
-</script>
 
 </body>
 </html>

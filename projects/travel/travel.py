@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, redirect, session , url_for
 import json
 import os
 
@@ -9,12 +9,7 @@ travel_bp = Blueprint('travel', __name__,
                          static_folder=os.path.join(BASE_DIR, 'static'))
                          
                          
-@travel_bp.route("/static/<path:filename>")
-def static_files(filename):
-    print(f"📂 Static file requested: {filename}")
-    return send_from_directory('static', filename)
-                         
-                         
+               
 
 travel_bp.secret_key = "1642300Mb"
 
@@ -64,16 +59,14 @@ def generate_checklist(form):
 def index():
     if request.method == "POST":
         session["form"] = request.form.to_dict()
-        return redirect("/travel/review")
-   
+    return redirect("/travel/review")   
     return render_template("index2.html", form=session.get("form"))
 # ===== صفحه بررسی =====
 @travel_bp.route("/review", methods=["GET"])
 def review():
     form = session.get("form")
     if not form:
-        return redirect("/travel/")
-
+    return redirect("/travel/")
     trip_type_map = {
         "solo": "انفرادی",
         "family": "خانوادگی"
@@ -83,6 +76,7 @@ def review():
         "hotel": "هتل",
         "hostel": "هاستل",
         "villa": "ویلا",
+        "my_villa": "ویلای شخصی",
         "suite": "سوئیت آپارتمان",
         "eco": "اقامتگاه بوم‌گردی",
         "camp": "چادر کمپ",
@@ -119,7 +113,9 @@ def result():
         "train": "با قطار",
         "car": "با خودرو",
         "motor": "با موتور",
+        "taxi": "با تاکسی",
         "bus": "با اتوبوس"
+        
     }
 
     season_fa = {
