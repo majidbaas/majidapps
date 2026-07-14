@@ -66,7 +66,7 @@ def index():
 def review():
     form = session.get("form")
     if not form:
-    return redirect("/travel/")
+        return redirect("/travel/")
     trip_type_map = {
         "solo": "انفرادی",
         "family": "خانوادگی"
