@@ -201,6 +201,12 @@
 			{% endif %}>
 			تاکسی
 			</option>
+			<option value="ship"
+			{% if form and form.transport == "ship" %}
+			selected
+			{% endif %}>
+			کشتی
+			</option>
 			
           </select>
         </div>

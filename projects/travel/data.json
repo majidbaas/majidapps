@@ -3,6 +3,7 @@
     {
       "title": "مدارک",
       "rules": {},
+	   "icon":"📄",
       "items": [
         {
           "name": "کارت ملی",
@@ -14,8 +15,9 @@
           "name": "پاسپورت",
           "default_count": 1,
           "description": "برای سفر خارجی",
+		  "icon":"🛂",
           "rules": {
-            "travel_type": ["external"]
+            "city_type": ["external"]
           }
         },
 		{
@@ -33,12 +35,31 @@
           "rules": {
             "transport": ["car"]
           }
-        }
+        },
+		{
+			"name":"بیمه مسافرتی",
+			"default_count":1,
+			"description":"برای سفر خارجی",
+			"rules":{
+				"city_type":["external"]
+			}
+		},
+		{
+			"name":"بلیط رفت و برگشت",
+			"default_count":1,
+			 "icon":"🎫",
+			"description":"نسخه چاپی یا دیجیتال",
+			"rules":{
+				"transport":["plane","train","bus"]
+			}
+		}
+}
       ]
     },
     {
       "title": "لباس",
       "rules": {},
+	  "icon":"👕",
       "items": [
         {
           "name": "کاپشن گرم",
@@ -47,13 +68,80 @@
           "rules": {
             "season": ["winter"]
           }
+        },{
+          "name": "لباس گرم",
+          "default_count": 1,
+          "description": "برای هوای سرد",
+          "rules": {
+            "season": ["winter"]
+          }
+        },{
+          "name": "دستکش",
+          "default_count": 1,
+          "description": "برای هوای سرد",
+          "rules": {
+            "season": ["winter"]
+          }
+        }
+		,
+          "name": "جوراب",
+          "default_count": 2,
+          "description": "اضافی",
+		   "icon":"🧦",
+          "rules": {
+            "season": ["summer" , "winter", "autumn", "spring "]
+          }
         },
         {
           "name": "لباس خنک",
           "default_count": 2,
+		   
           "description": "برای تابستان",
           "rules": {
             "season": ["summer"]
+          }
+        },
+        {
+          "name": "کلاه آفتابی",
+          "default_count": 2,
+          "description": "برای تابستان",
+          "rules": {
+            "season": ["summer"]
+          }
+        }
+		,
+        {
+          "name": "بارانی",
+          "default_count": 2,
+          "description": "برای تابستان",
+          "rules": {
+            "season": ["autumn"]
+          }
+        }
+		,
+        {
+          "name": "شلوار",
+          "default_count": 2,
+          "description": "اضافی",
+          "rules": {
+              "season": ["summer" , "winter", "autumn", "spring "]
+          }
+        },
+        {
+          "name": "لباس زیر",
+          "default_count": 2,
+          "description": "برای تابستان",
+          "rules": {
+              "season": ["summer" , "winter", "autumn", "spring "]
+          }
+        },
+		{
+          "name": "دمپایی",
+          "default_count": 2,
+          "description": "برای تابستان",
+          "rules": {
+              "season": ["summer" , "winter", "autumn", "spring "],
+			"hotel_type": ["hotel", "villa"]
           }
         }
       ]
@@ -71,6 +159,7 @@
     {
       "name": "خمیر دندان",
       "default_count": 1,
+	   "icon":"🦷",
       "description": "",
       "rules": {}
     },
@@ -78,8 +167,49 @@
       "name": "شامپو",
       "default_count": 1,
       "description": "",
+	   "icon":"🧴",
       "rules": {
-        "stay_type": ["hotel", "villa"]
+        "hotel_type": ["hotel", "villa"]
+      }
+    },
+    {
+      "name": "شانه",
+      "default_count": 1,
+      "description": "",
+      "rules": {
+        "hotel_type": ["hotel", "villa"]
+      }
+    },
+    {
+      "name": "نخ دندان",
+      "default_count": 1,
+      "description": "",
+      "rules": {
+        "hotel_type": ["hotel", "villa"]
+      }
+    },
+    {
+      "name": "دستمال کاغذی",
+      "default_count": 1,
+      "description": "",
+      "rules": {
+        "hotel_type": [ "villa"]
+      }
+    },
+    {
+      "name": "ژیلت",
+      "default_count": 1,
+      "description": "",
+      "rules": {
+        "hotel_type": ["hotel", "villa"]
+      }
+    },
+    {
+      "name": "صابون",
+      "default_count": 1,
+      "description": "",
+      "rules": {
+        "hotel_type": ["hotel", "villa"]
       }
     }
   ]
@@ -87,23 +217,27 @@
 {
   "title": "وسایل الکترونیکی",
   "rules": {},
+  "icon":"🔌",
   "items": [
     {
       "name": "شارژر موبایل",
       "default_count": 1,
       "description": "",
+	   
       "rules": {}
     },
     {
-      "name": "پاوربانک",
-      "default_count": 1,
-      "description": "",
-      "rules": {}
+       "name":"پاوربانک",
+		"count":1,
+		"icon":"🔋",
+		"priority":"important",
+		"description":"در سفرهای طولانی"
     },
     {
       "name": "هدفون",
       "default_count": 1,
       "description": "",
+	   "icon":"🎧",
       "rules": {
         "transport": ["plane", "train"]
       }
@@ -113,6 +247,7 @@
 {
   "title": "دارو",
   "rules": {},
+  "icon":"💊",
   "items": [
     {
       "name": "مسکن",
@@ -122,6 +257,20 @@
     },
     {
       "name": "داروی شخصی",
+      "default_count": 1,
+	  
+      "description": "",
+      "rules": {}
+    },
+    {
+      "name": "چسب زخم",
+      "default_count": 1,
+      "description": "",
+	  "icon":"🩹",
+      "rules": {}
+    },
+    {
+      "name": "قرص آلرژی",
       "default_count": 1,
       "description": "",
       "rules": {}
@@ -134,6 +283,107 @@
         "transport": ["bus", "ship"]
       }
     }
+  ]
+}
+,
+,
+{
+  "title": "منزل اقوام",
+  "rules": {},
+  "items": [
+    {
+      "name": "هماهنگی با میزبان",
+      "default_count": 1,
+      "description": "",
+      "rules": {}
+    },
+    {
+      "name": "آدرس و لوکیشن",
+      "default_count": 1,
+	  "icon":"🗺️",
+      "description": "",
+      "rules": {}
+    },
+    {
+      "name": "هدیه ای برای میزبان",
+      "default_count": 1,
+      "description": "",
+	  "icon":"🎁",
+      "rules": {}
+    },
+    {
+      "name": "مقداری خوراکی",
+      "default_count": 1,
+      "description": "",
+      "rules": {}
+    }
+  ]
+}
+
+{
+  "title": "تجهیزات سفر کمپ",
+  "rules": {"hotel_type" : [ "camp"  ] },
+   "icon":"⛺",
+  "items": [
+    {
+      "name": "چادر",
+      "default_count": 1,
+      "description": "",
+	  
+      "rules": {    }
+    },
+    {
+      "name": "عینک آفتابی",
+      "default_count": 1,
+      "description": "",
+	  
+      "rules": {   }
+    },
+    {
+      "name": "کیسه خواب",
+      "default_count": 1,
+      "description": "",
+      "rules": {   }
+    },
+    {
+      "name": "اسپری ضد حشره",
+      "default_count": 1,
+      "description": "",
+      "rules": {   }
+    }
+	,
+    {
+      "name": "کرم ضدآفتاب",
+      "default_count": 1,
+      "description": "",
+      "rules": {    }
+    },
+    {
+      "name": "قمقمه",
+      "default_count": 1,
+      "description": "",
+      "rules": {    }
+    },
+    {
+      "name": "زیرانداز",
+      "default_count": 1,
+      "description": "",
+      "rules": {   }
+    },
+    {
+      "name": "چراغ قوه",
+      "default_count": 1,
+      "description": "",
+	   "icon":"🔦",
+      "rules": {   }
+    },
+    {
+      "name": "طناب",
+      "default_count": 1,
+      "description": "",
+      "rules": {    }
+    }
+    
   ]
 }
   ]
