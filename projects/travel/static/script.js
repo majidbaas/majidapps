@@ -1,3 +1,5 @@
+console.log("script loaded");
+
 // =========================
 // Cities
 // =========================
@@ -33,9 +35,19 @@ function loadCities(selectedCity = "") {
 }
 
 // ---------- Travelers ----------
-let adult = parseInt(document.getElementById("adultInput").value) || 1;
-let child = parseInt(document.getElementById("childInput").value) || 0;
+let adult = 1;
+let child = 0;
 
+const adultInput = document.getElementById("adultInput");
+const childInput = document.getElementById("childInput");
+
+if (adultInput) {
+    adult = parseInt(adultInput.value) || 1;
+}
+
+if (childInput) {
+    child = parseInt(childInput.value) || 0;
+}
 function openTravelerModal() {
   document.getElementById("travelerModal").classList.add("active");
 }
@@ -63,9 +75,11 @@ function applyTravelers() {
   textEl.innerText =
     adult + " بزرگسال" + (child ? "، " + child + " کودک" : "");
 
-  document.getElementById("adultInput").value = adult;
-  document.getElementById("childInput").value = child;
+	const adultInput = document.getElementById("adultInput");
+	const childInput = document.getElementById("childInput");
 
+	if(adultInput) adultInput.value = adult;
+	if(childInput) childInput.value = child;
   closeTravelerModal();
 }
 
@@ -138,12 +152,19 @@ document.addEventListener("DOMContentLoaded", function () {
 	  
      
 
-      document.getElementById("adultInput").value = 1;
-      document.getElementById("childInput").value = 0;
-      document.getElementById("adultCount").innerText = 1;
-      document.getElementById("childCount").innerText = 0;
+      const adultInput = document.getElementById("adultInput");
+		const childInput = document.getElementById("childInput");
+		const adultCount = document.getElementById("adultCount");
+		const childCount = document.getElementById("childCount");
+		const travelerText = document.querySelector(".traveler-text");
 
-      document.querySelector(".traveler-text").innerText = "1 بزرگسال";
+		if (adultInput) adultInput.value = 1;
+		if (childInput) childInput.value = 0;
+
+		if (adultCount) adultCount.innerText = 1;
+		if (childCount) childCount.innerText = 0;
+
+		if (travelerText) travelerText.innerText = "1 بزرگسال";
     } else {
       travelerInput.classList.remove("disabled");
    
@@ -175,3 +196,104 @@ function setStep(stepNumber) {
     connector.classList.toggle('completed', index + 2 <= stepNumber);
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+
+
+
+    console.log("DOMContentLoaded");
+
+
+
+    const bar = document.getElementById("progressFill");
+    const percent = document.getElementById("progressPercent");
+    const status = document.getElementById("progressStatus");
+    const btn = document.getElementById("confirmBtn");
+
+    // اگر این صفحه صفحه پیش‌نمایش نبود، هیچ کاری نکن
+    if (!bar || !percent || !status || !btn) {
+        return;
+    }
+
+    let progress = 0;
+
+    btn.disabled = true;
+
+    const steps = [
+        { percent:10, text:"🔍 در حال بررسی اطلاعات سفر..." },
+        { percent:25, text:"📍 بررسی مقصد سفر..." },
+        { percent:40, text:"🏨 انتخاب وسایل متناسب با محل اقامت..." },
+        { percent:55, text:"👕 آماده‌سازی لباس‌های مناسب فصل..." },
+        { percent:70, text:"💊 بررسی وسایل بهداشتی..." },
+        { percent:82, text:"🔌 اضافه کردن وسایل الکترونیکی..." },
+        { percent:92, text:"📋 تولید چک لیست اختصاصی..." },
+        { percent:100, text:"✅ همه چیز آماده است." }
+    ];
+
+    function updateStatus() {
+
+        for(let i=steps.length-1;i>=0;i--){
+
+            if(progress>=steps[i].percent){
+
+                status.innerText=steps[i].text;
+                break;
+
+            }
+
+        }
+
+    }
+
+    function next(){
+
+        progress++;
+
+        bar.style.width = progress + "%";
+
+        percent.innerText = progress + "%";
+
+        updateStatus();
+
+        if(progress<30){
+
+            setTimeout(next,15);
+
+        }
+
+        else if(progress<70){
+
+            setTimeout(next,20);
+
+        }
+
+        else if(progress<90){
+
+            setTimeout(next,60);
+
+        }
+
+        else if(progress<100){
+
+            setTimeout(next,120);
+
+        }
+
+        else{
+
+            status.innerHTML =
+            "✅ اطلاعات سفر با موفقیت بررسی شد.<br>اکنون می‌توانید چک لیست را ایجاد کنید.";
+
+            btn.disabled = false;
+
+            btn.classList.add("ready");
+
+        }
+
+    }
+
+    next();
+
+});
+
+console.log("END OF SCRIPT");

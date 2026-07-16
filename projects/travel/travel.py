@@ -35,22 +35,35 @@ def generate_checklist(form):
     result = {}
 
     for category in data["categories"]:
+
         category_rules = category.get("rules", {})
         if category_rules and not rule_match(category_rules, form):
             continue
 
         items_list = []
+
         for item in category["items"]:
+
             item_rules = item.get("rules", {})
             if item_rules and not rule_match(item_rules, form):
                 continue
-            items_list.append(item["name"])
+
+            items_list.append({
+                "name": item["name"],
+                "icon": item.get("icon", ""),
+                "count": item.get("default_count", 1),
+                "description": item.get("description", ""),
+                "priority": item.get("priority", "")
+            })
 
         if items_list:
-            result[category["title"]] = items_list
+
+            result[category["title"]] = {
+                "icon": category.get("icon", "📦"),
+                "items": items_list
+            }
 
     return result
-
 # ===== صفحه اصلی =====
 @travel_bp.route("/", methods=["GET", "POST"])
 def index():
@@ -69,34 +82,70 @@ def review():
     form = session.get("form")
     if not form:
         return redirect(url_for("travel.index"))
-    trip_type_map = {
+    travel_type_map = {
         "solo": "انفرادی",
         "family": "خانوادگی"
     }
 
-    accommodation_map = {
-        "hotel": "هتل",
-        "hostel": "هاستل",
-        "villa": "ویلا",
-        "my_villa": "ویلای شخصی",
-        "suite": "سوئیت آپارتمان",
-        "eco": "اقامتگاه بوم‌گردی",
-        "camp": "چادر کمپ",
-        "familyHome": "خانه اقوام"
+    transport_map = {
+        "plane": "هواپیما",
+        "train": "قطار",
+        "car": "خودرو",
+        "bus": "اتوبوس",
+        "ship": "کشتی",
+        "motor": "موتور",
+        "taxi": "تاکسی"
     }
 
-    travel_type = form.get("travel_type")
-    hotel_type = form.get("hotel_type")
+    hotel_map = {
+        "hotel": "هتل",
+        "villa": "ویلا",
+        "suite": "سوئیت",
+        "hostel": "هاستل",
+        "camp": "کمپ",
+        "eco": "بوم‌گردی",
+        "familyHome": "منزل اقوام",
+        "my_villa": "ویلای شخصی"
+    }
 
-    trip_type_fa = trip_type_map.get(travel_type, travel_type)
-    accommodation_fa = accommodation_map.get(hotel_type, hotel_type)
+    season_map = {
+        "spring": "بهار",
+        "summer": "تابستان",
+        "autumn": "پاییز",
+        "winter": "زمستان"
+    }
+
+    budget_map = {
+        "economic": "اقتصادی",
+        "medium": "متوسط",
+        "luxury": "لاکچری"
+    }
+
+    travel_type = travel_type_map.get(form["travel_type"], form["travel_type"])
+
+    hotel = hotel_map.get(form["hotel_type"], form["hotel_type"])
+
+    transport = transport_map.get(form["transport"], form["transport"])
+
+    season = season_map.get(form["season"], form["season"])
+
+    budget = budget_map.get(form["budget"], form["budget"])
 
     return render_template(
-        "review.html",
-        form=form,
-        trip_type=trip_type_fa,
-        accommodation=accommodation_fa
-    )
+    "review.html",
+    form=form,
+
+    travel_type=travel_type,
+    hotel=hotel,
+    transport=transport,
+    season=season,
+    budget=budget,
+
+    city=form["city_fa"],
+    stay_days=form["stay_days"],
+    adult=form["adult_count"],
+    child=form["child_count"]
+)
 
 # ===== صفحه نتیجه =====
 @travel_bp.route("/result", methods=["POST"])
@@ -140,7 +189,7 @@ def result():
         stay_days = 1
 
     checklist = generate_checklist(form)
-
+    print(checklist)
     title = (
         f"چک‌لیست سفر {name} "
         f"{travel_type_fa.get(travel_type , "")} "
@@ -151,11 +200,11 @@ def result():
 
     session.pop("form", None)
 
-    for category in checklist:
-        checklist[category] = list(dict.fromkeys(checklist[category]))
-
+   
     return render_template(
         "travel_result.html",
         checklist=checklist,
         title=title,
+       
+
     )

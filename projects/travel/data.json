@@ -53,7 +53,7 @@
 				"transport":["plane","train","bus"]
 			}
 		}
-}
+
       ]
     },
     {
@@ -83,13 +83,13 @@
             "season": ["winter"]
           }
         }
-		,
+	,{
           "name": "جوراب",
           "default_count": 2,
           "description": "اضافی",
 		   "icon":"🧦",
           "rules": {
-            "season": ["summer" , "winter", "autumn", "spring "]
+            "season": ["summer" , "winter", "autumn", "spring"]
           }
         },
         {
@@ -149,6 +149,7 @@
 	{
   "title": "لوازم بهداشتی",
   "rules": {},
+  "icon":"🧴",
   "items": [
     {
       "name": "مسواک",
@@ -226,13 +227,14 @@
 	   
       "rules": {}
     },
-    {
-       "name":"پاوربانک",
-		"count":1,
-		"icon":"🔋",
-		"priority":"important",
-		"description":"در سفرهای طولانی"
-    },
+   {
+  "name":"پاوربانک",
+  "icon":"🔋",
+  "description":"در سفرهای طولانی",
+  "default_count":1,
+  "priority":"important",
+  "rules":{}
+},
     {
       "name": "هدفون",
       "default_count": 1,
@@ -286,10 +288,11 @@
   ]
 }
 ,
-,
+
 {
   "title": "منزل اقوام",
-  "rules": {},
+  "rules": {"hotel_type":["familyHome"]},
+    "icon":"🏠",
   "items": [
     {
       "name": "هماهنگی با میزبان",
@@ -318,7 +321,7 @@
       "rules": {}
     }
   ]
-}
+},
 
 {
   "title": "تجهیزات سفر کمپ",

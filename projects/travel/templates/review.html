@@ -49,38 +49,111 @@
 
 <div class="result-wrapper">
 
-  <h2>🔍 بررسی اطلاعات سفر</h2>
+ <h2 class="preview-title">
+    🧳 در حال آماده‌سازی چک لیست سفر شما...
+</h2>
 
- 
+<p class="preview-subtitle">
+لطفاً اطلاعات را بررسی کنید، سپس ساخت چک لیست را تأیید کنید.
+</p>
+ <div class="progress-box">
 
-  <div class="summary-grid">
- 
-   <div><strong>نام:</strong> {{ form.name }}</div>
-   <div><strong>نوع سفر:</strong> {{ travel_type }}</div>
-   <div><strong>مقصد:</strong> {{ form.city_fa }}</div>
-   <div><strong>محل اقامت:</strong> {{ accommodation  }}</div>
-   <div><strong>مدت اقامت:</strong> {{ form.stay_days }} شب</div>
-  </div>
+    <div class="progress-text">
+        <span id="progressPercent">0%</span>
+        <span>در حال بررسی اطلاعات...</span>
+    </div>
 
+    <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+    </div>
 
-  <form action="{{ url_for('travel.result') }}" method="post">
-  <button type="submit" class="submit-btn">
-     تأیید و ساخت چک لیست
-	 </button>
-	
-  
-</form> 
-<div class="back-home">
-   <a href="{{ url_for('home') }}" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
+    <div id="progressStatus" class="progress-status">
+        لطفاً چند لحظه صبر کنید...
+    </div>
+
 </div>
+
+  <div class="travel-summary">
+
+    <div class="summary-item">
+        <span>👤 نام</span>
+        <strong>{{ form.name }}</strong>
+    </div>
+
+    <div class="summary-item">
+        <span>🏖 نوع سفر</span>
+        <strong>{{ travel_type }}</strong>
+    </div>
+
+    <div class="summary-item">
+        <span>📍 مقصد</span>
+        <strong>{{ city }}</strong>
+    </div>
+
+    <div class="summary-item">
+        <span>🏨 محل اقامت</span>
+        <strong>{{ hotel }}</strong>
+    </div>
+
+    <div class="summary-item">
+        <span>🚗 وسیله</span>
+        <strong>{{ transport }}</strong>
+    </div>
+
+    <div class="summary-item">
+        <span>🌤 فصل</span>
+        <strong>{{ season }}</strong>
+    </div>
+
+    <div class="summary-item">
+        <span>🌙 مدت اقامت</span>
+        <strong>{{ stay_days }} شب</strong>
+    </div>
+
+    <div class="summary-item">
+        <span>👨‍👩‍👧 مسافران</span>
+        <strong>{{ adult }} بزرگسال - {{ child }} کودک</strong>
+    </div>
+
+    <div class="summary-item">
+        <span>💰 بودجه</span>
+        <strong>{{ budget }}</strong>
+    </div>
+
+</div>
+
+
+<div class="actions-container">
+
+<form action="{{ url_for('travel.result') }}" method="post">
+
+<button
+type="submit"
+class="submit-btn"
+id="confirmBtn"
+disabled>
+
+✅ تأیید و ساخت چک لیست
+
+</button>
+</form>
 
 <button
 type="button"
 class="back-link"
 onclick="location.href='{{ url_for('travel.index') }}'">
+
 ✏️ ویرایش اطلاعات
+
 </button>
 
+<a href="{{ url_for('home') }}" class="btn-back">
+
+🏠 بازگشت به صفحه اصلی
+
+</a>
+
+</div>
  </div>  
 	
 	

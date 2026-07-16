@@ -278,16 +278,17 @@
       </div>
 
       <!-- ارسال -->
-      <div class="submit-wrapper">
-        <button class="submit-btn" type="submit">
-          ساخت چک لیست 🧾
-        </button>
-      </div>
-	  <div class="back-home">
-       <a href="{{ url_for('home') }}" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
-      </div>
-    </form>
-     </div>
+     <div class="actions-container">
+
+    <button class="submit-btn" type="submit">
+        🧾 ساخت چک لیست
+    </button>
+
+    <a href="{{ url_for('home') }}" class="btn-back">
+        🏠 بازگشت به صفحه اصلی
+    </a>
+
+</div>
 
 
 {% if categories %}
@@ -350,12 +351,19 @@
       </div>
     </div>
 
-    <button type="button" class="submit-btn" onclick="applyTravelers()">
-      تأیید
+<div class="actions-container">
+
+    <button type="button"
+            class="submit-btn"
+            onclick="applyTravelers()">
+        ✔ تأیید
     </button>
-	<div class="back-home">
-		<a href="{{ url_for('home') }}" class="btn-back">🏠 بازگشت به صفحه اصلی</a>
-	</div>
+
+    <a href="{{ url_for('home') }}" class="btn-back">
+        🏠 بازگشت
+    </a>
+
+</div>
 
   </div>
 </div>

@@ -50,28 +50,67 @@
 
   </div>
 </div>
-
-  <div class="review-wrapper">
+<div class="review-wrapper">
     <h2>{{ title }}</h2>
- 
- 
+
 <div class="cards-container">
 
-{% for category, items in checklist.items() %}
+{% for category, data in checklist.items() %}
 
-<div class="category-card">
+<div class="category-card
+{% if data["items"]|length > 12 %}
+three-column
+{% elif data["items"]|length > 6 %}
+two-column
+{% endif %}">
 
-    <div class="card-title">
-        {{ category }}
+    <div class="card-header">
+
+        <div class="card-title">
+            {{ data["icon"] }}
+            {{ category }}
+        </div>
+
+        <div class="card-count">
+            {{ data["items"]|length }} مورد
+        </div>
+
     </div>
 
     <ul class="item-list">
 
-    {% for item in items %}
+    {% for item in data["items"] %}
 
         <li class="item-row">
-            <input type="checkbox">
-            <span>{{ item }}</span>
+
+            <label class="item-label">
+
+                <input
+                    type="checkbox"
+                    class="item-checkbox">
+
+                <span class="item-icon">
+                    {{ item["icon"] }}
+                </span>
+
+                <span class="item-name">
+                    {{ item["name"] }}
+                </span>
+
+                {% if item["count"] > 1 %}
+                    <span class="item-count">
+                        ×{{ item["count"] }}
+                    </span>
+                {% endif %}
+
+                {% if item["priority"] == "important" %}
+                    <span class="item-priority">
+                        ⭐
+                    </span>
+                {% endif %}
+
+            </label>
+
         </li>
 
     {% endfor %}
@@ -82,24 +121,27 @@
 
 {% endfor %}
 
-</div> 
-  </div>
+</div>
 
-    <div class="actions-container">  
-      <button class="print-btn" onclick="window.print()">چاپ 🖨</button>
-	  <button
-		type="button"
-		class="back-link"
-		onclick="location.href='{{ url_for('travel.index') }}'">
-		✏️ ویرایش اطلاعات
-		</button>
-	  <div class="back-home">
-	      <a href="{{ url_for('home') }}" class="btn-back">
-			🏠 بازگشت به صفحه اصلی
-			</a>
-	  </div>
-    </div>
+</div>
+<div class="actions-container">
 
+    <button class="print-btn" onclick="window.print()">
+        🖨 چاپ
+    </button>
+
+    <button
+        type="button"
+        class="back-link"
+        onclick="location.href='{{ url_for('travel.index') }}'">
+        ✏️ ویرایش اطلاعات
+    </button>
+
+    <a href="{{ url_for('home') }}" class="btn-back">
+        🏠 بازگشت به صفحه اصلی
+    </a>
+
+</div>
   
 
 
