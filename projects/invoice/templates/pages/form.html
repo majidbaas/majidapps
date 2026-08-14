@@ -1,0 +1,227 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}صدور فاکتور{% endblock %}
+
+{% block content %}
+
+<style>
+  
+    /* گرد کردن گوشه‌های جدول */
+    #itemsTable {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    /* تنظیم سایز فونت و پدینگ کل جدول (همه‌چیز یکدست) */
+    #itemsTable {
+        font-size: 14px;
+    }
+    #itemsTable th,
+    #itemsTable td {
+        padding: 6px 4px;
+        vertical-align: middle;
+    }
+
+    /* جلوگیری از دو خطی شدن ستون تخفیف */
+    #itemsTable .d-flex {
+        white-space: nowrap;
+    }
+    /* کوچک‌ترین تنظیم ممکن برای فیلدها (فقط برای حفظ یک خط) */
+    #itemsTable .d-flex select,
+    #itemsTable .d-flex input {
+        height: 35px;
+        padding: 2px 6px;
+    }
+    #itemsTable .d-flex select {
+        padding-right: 26px; /* فضای کافی برای فلش */
+    }
+    #itemsTable .d-flex input {
+        width: 85px; /* کمی پهن‌تر تا کلمه کامل دیده شود */
+    }
+</style>
+
+<div class="invoice-form-container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+                {% if edit_mode %}ویرایش فاکتور{% else %}ساخت فاکتور فروش{% endif %}
+            </h4>
+        </div>
+
+        <div class="card-body">
+            <!-- در حالت ویرایش، اکشن را به مسیر ذخیره تغییر می‌دهیم (فعلاً همان است) -->
+<form method="POST" action="/invoice" id="invoice-form">                
+                <!-- ردیف اول: تاریخ و شماره فاکتور -->
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label">تاریخ</label>
+                        <input type="text" class="form-control" name="date" id="invoice_date" 
+                               value="{{ invoice_data.invoice_date if edit_mode else '' }}" 
+                               placeholder="1405/01/01" required>
+                    </div>
+
+                  
+                </div>
+
+                <!-- بخش خریدار (به صورت یک باکس کارتی مجزا) -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        مشخصات خریدار
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" name="buyer" 
+                                       value="{{ invoice_data.buyer if edit_mode else '' }}" 
+                                       placeholder="نام خریدار">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" name="buyer_phone" 
+                                       value="{{ invoice_data.buyer_phone if edit_mode else '' }}" 
+                                       placeholder="شماره تماس">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" name="buyer_address" 
+                                       value="{{ invoice_data.buyer_address if edit_mode else '' }}" 
+                                       placeholder="آدرس">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-bordered mt-0" id="itemsTable">
+                    <thead class="table-primary">
+                        <tr>
+                            <th style="width:26%">شرح کالا</th>
+                            <th style="width:8%">تعداد</th>
+                            <th style="width:15%">قیمت واحد</th>
+                            <th style="width:15%">مبلغ</th>
+                            <th style="width:18%">تخفیف</th>
+                            <th style="width:12%">قابل پرداخت</th>
+                            <th style="width:6%">حذف</th>
+                        </tr>
+                    </thead>
+                    <tbody id="items">
+                        {% if edit_mode and invoice_data.items_list %}
+                            {% for item in invoice_data.items_list %}
+                            <tr>
+                                <td>
+                                    <input type="text" name="item[]" class="form-control" value="{{ item.title }}" required>
+                                </td>
+                                <td>
+                                    <input type="number" name="qty[]" class="form-control qty" value="{{ item.quantity }}" min="1" required>
+                                </td>
+                                <td>
+									<input type="text" 
+										   name="price[]" 
+										   class="form-control price number-format" 
+										   value="{{ item.price }}" 
+										   required 
+										   onkeypress="return (event.charCode >= 48 && event.charCode <= 57)">
+								</td>
+
+								<td class="subtotal">
+									{{ item.quantity * item.price }}
+								</td>
+                                <td>
+                                    <div class="d-flex align-items-center flex-nowrap gap-1">
+                                        <select class="form-select discount-type" name="item_discount_type[]" style="width:75px; flex-shrink:0;">
+                                            <option value="none" {% if item.discount_type == 'none' %}selected{% endif %}>غیرفعال</option>
+                                            <option value="amount" {% if item.discount_type == 'amount' %}selected{% endif %}>مبلغ</option>
+                                            <option value="percent" {% if item.discount_type == 'percent' %}selected{% endif %}>درصد</option>
+                                        </select>
+                                       <input type="text" name="item_discount[]" class="form-control item-discount discount-input number-format" 
+       style="width:85px; flex-grow:1;" placeholder="غیرفعال"value="{{ item.discount }}"
+       onkeypress="return (event.charCode >= 48 && event.charCode <= 57)">
+                                    </div>
+                                </td>
+                                <td class="amount">{{ item.final_price }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm removeRow">✕</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td><input type="text" name="item[]" class="form-control" required></td>
+                                <td><input type="number" name="qty[]" class="form-control qty" value="1" min="1" required></td>
+                                <td><input type="text" name="price[]" class="form-control price number-format" value="0" required></td>
+                                <td class="subtotal">0</td>
+                                <td>
+                                    <div class="d-flex align-items-center flex-nowrap gap-1">
+                                        <select class="form-select discount-type" name="item_discount_type[]" style="width:75px; flex-shrink:0;">
+                                            <option value="none" selected>غیرفعال</option>
+                                            <option value="amount">مبلغ</option>
+                                            <option value="percent">درصد</option>
+                                        </select>
+                                        <!-- تغییر مهم: اضافه کردن کلاس discount-input -->
+                                        <input type="text" name="item_discount[]" class="form-control item-discount discount-input number-format" 
+                                               style="width:85px; flex-grow:1;" placeholder="غیرفعال" value=""
+                                               onkeypress="return (event.charCode >= 48 && event.charCode <= 57)">
+                                    </div>
+                                </td>
+                                <td class="amount">0</td>
+                                <td><button type="button" class="btn btn-danger btn-sm removeRow">✕</button></td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+
+                <div class="text-start mt-3 mb-1">
+                    <button id="addRow" type="button" class="btn btn-success">➕ افزودن ردیف</button>
+                </div>
+
+                <!-- جمع بندی -->
+                <div class="row mt-4">
+                    <div class="col-md-5 me-auto">
+                        <table class="table table-bordered summary-table">
+                            <tbody>
+                                <tr>
+                                    <th>جمع کالاها</th>
+                                    <td><span id="subtotal" class="summary-number">0</span></td>
+                                </tr>
+                                <tr>
+                                    <th>مجموع تخفیف</th>
+                                    <td><span id="discount" class="summary-number">0</span></td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <div class="d-flex align-items-center justify-content-end gap-2">
+                                            مالیات
+                                            <span class="tax-percent-label">({{ settings.vat_percent if settings else 10 }}%)</span>
+                                            <div class="form-check form-switch m-0">
+                                                <input class="form-check-input" type="checkbox" id="vat_enabled" name="vat_enabled" checked>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <span id="vatAmount" class="summary-number">0</span>
+                                        <!-- فیلد مخفی درصد برای جاوا‌اسکریپت -->
+                                        <input type="hidden" id="vat_percent" value="{{ settings.vat_percent if settings else 10 }}">
+                                    </td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <th>مبلغ قابل پرداخت</th>
+                                    <td><span id="total" class="summary-number total-number">0</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- توضیحات -->
+                <div class="mb-2">
+                    <label class="form-label fw-bold">توضیحات</label>
+                    <textarea name="notes" class="form-control" rows="3">{{ invoice_data.description if edit_mode else '' }}</textarea>
+                </div>
+
+                
+
+            </form>
+        </div>
+    </div>
+</div>
+             
+
+<script src="{{ url_for('static', filename='js/invoice.js') }}"></script>
+{% endblock %}

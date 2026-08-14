@@ -1,0 +1,412 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}لیست فاکتورها{% endblock %}
+
+{% block content %}
+
+<style>
+
+    /* =========================================
+       جستجوی فاکتورها
+       ========================================= */
+
+    .invoice-search-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 12px 15px;
+        margin-bottom: 15px;
+    }
+
+    .invoice-search-box label {
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+
+    /* =========================================
+       جدول
+       ========================================= */
+
+    .invoice-list-wrapper {
+        overflow-x: auto;
+    }
+
+    .invoice-list-table {
+        width: 100%;
+        table-layout: fixed;
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .invoice-list-table th,
+    .invoice-list-table td {
+        vertical-align: middle;
+        padding: 8px 10px;
+    }
+
+
+    /* =========================================
+       هدر جدول
+       ========================================= */
+
+    .invoice-list-table thead th {
+        background: #e7f0ff;
+        color: #164a8a;
+        font-weight: 700;
+        border-color: #c5d7ef;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================
+       عرض ستون‌ها
+       ========================================= */
+
+    /* شماره فاکتور */
+    .invoice-list-table th:nth-child(1),
+    .invoice-list-table td:nth-child(1) {
+        width: 11%;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    /* تاریخ */
+    .invoice-list-table th:nth-child(2),
+    .invoice-list-table td:nth-child(2) {
+        width: 15%;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    /* خریدار */
+    .invoice-list-table th:nth-child(3),
+    .invoice-list-table td:nth-child(3) {
+        width: 27%;
+       text-align: center;
+    }
+
+    /* مبلغ */
+    .invoice-list-table th:nth-child(4),
+    .invoice-list-table td:nth-child(4) {
+        width: 22%;
+         text-align: center;
+        direction: ltr;
+        white-space: nowrap;
+    }
+
+    /* عملیات */
+    .invoice-list-table th:nth-child(5),
+    .invoice-list-table td:nth-child(5) {
+        width: 25%;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================
+       ردیف‌های یکی در میان
+       ========================================= */
+
+    .invoice-list-table tbody tr:nth-child(odd) {
+        background-color: #f8fbff;
+    }
+
+    .invoice-list-table tbody tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+
+    /* هاور */
+    .invoice-list-table tbody tr:hover {
+        background-color: #eef5ff;
+    }
+
+
+    /* =========================================
+       مبلغ
+       ========================================= */
+
+    .invoice-amount {
+        font-weight: 600;
+        direction: ltr;
+        unicode-bidi: embed;
+    }
+
+
+    /* =========================================
+       دکمه‌های عملیات
+       ========================================= */
+
+    .invoice-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .invoice-actions .btn-sm {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+    }
+
+
+    /* =========================================
+       پیام بدون نتیجه
+       ========================================= */
+
+    #noResults {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+    }
+
+
+    /* =========================================
+       موبایل
+       ========================================= */
+
+    @media (max-width: 768px) {
+
+        .invoice-list-table {
+            min-width: 700px;
+        }
+
+    }
+
+</style>
+
+<div class="card shadow">
+
+
+<!-- =========================================
+     هدر
+     ========================================= -->
+
+<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+
+    <span>لیست فاکتورهای ثبت شده</span>
+
+</div>
+
+
+<div class="card-body">
+
+
+    <!-- =========================================
+         جستجو
+         ========================================= -->
+
+    <div class="invoice-search-box">
+
+        <label for="buyerSearch" class="form-label">
+            جستجوی نام خریدار
+        </label>
+
+        <input type="text"
+               id="buyerSearch"
+               class="form-control"
+               placeholder="نام خریدار را وارد کنید..."
+               autocomplete="off">
+
+    </div>
+
+
+    <!-- =========================================
+         جدول
+         ========================================= -->
+
+    <div class="invoice-list-wrapper">
+
+        <table class="table table-bordered invoice-list-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>شماره فاکتور</th>
+
+                    <th>تاریخ</th>
+
+                    <th>خریدار</th>
+
+                    <th>مبلغ کل (ریال)</th>
+
+                    <th>عملیات</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="invoiceTableBody">
+
+                {% for inv in invoices %}
+
+                <tr class="invoice-row">
+
+                    <!-- شماره فاکتور -->
+                    <td>
+                        {{ inv[1]|fa }}
+                    </td>
+
+
+                    <!-- تاریخ -->
+                    <td>
+                        {{ inv[2]|fa }}
+                    </td>
+
+
+                    <!-- خریدار -->
+                    <td class="buyer-name">
+                        {{ inv[3] or '---' }}
+                    </td>
+
+
+                    <!-- مبلغ کل -->
+                    <td>
+
+                        <span class="invoice-amount">
+                            {{ "{:,.0f}".format(inv[11])|fa }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- عملیات -->
+                    <td>
+
+                        <div class="invoice-actions">
+
+                            <!-- پیش‌نمایش -->
+                            <a href="/invoice/preview/{{ inv[0] }}?source=list"
+                               class="btn btn-outline-primary btn-sm"
+                               title="پیش‌نمایش فاکتور">
+                                👁️
+                            </a>
+
+
+                            <!-- ویرایش -->
+                            <a href="/invoice/edit/{{ inv[0] }}"
+                               class="btn btn-outline-warning btn-sm"
+                               title="ویرایش فاکتور">
+                                ✏️
+                            </a>
+
+
+                            <!-- دانلود PDF -->
+                            <a href="/invoice/download_pdf/{{ inv[0] }}"
+                               class="btn btn-outline-success btn-sm"
+                               title="دانلود فایل PDF">
+                                📄
+                            </a>
+
+
+                            <!-- حذف -->
+                            <form action="/invoice/delete/{{ inv[0] }}"
+                                  method="post"
+                                  style="display:inline;"
+                                  onsubmit="return confirm('آیا از حذف این فاکتور اطمینان دارید؟');">
+
+                                <button type="submit"
+                                        class="btn btn-outline-danger btn-sm"
+                                        title="حذف فاکتور">
+                                    🗑️
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+
+                <!-- بدون نتیجه -->
+                <tr id="noResults">
+
+                    <td colspan="5">
+                        فاکتوری با این نام پیدا نشد.
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<script>
+
+    /* =========================================
+       جستجوی لحظه‌ای بر اساس نام خریدار
+       ========================================= */
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const searchInput = document.getElementById("buyerSearch");
+        const rows = document.querySelectorAll(".invoice-row");
+        const noResults = document.getElementById("noResults");
+
+        searchInput.addEventListener("input", function () {
+
+            const searchText = this.value.trim().toLowerCase();
+
+            let visibleCount = 0;
+
+            rows.forEach(function (row) {
+
+                const buyerName =
+                    row.querySelector(".buyer-name")
+                       .textContent
+                       .trim()
+                       .toLowerCase();
+
+                if (buyerName.includes(searchText)) {
+
+                    row.style.display = "";
+
+                    visibleCount++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+
+            if (visibleCount === 0) {
+
+                noResults.style.display = "";
+
+            } else {
+
+                noResults.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+</script>
+
+{% endblock %}

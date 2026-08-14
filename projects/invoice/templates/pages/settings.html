@@ -1,0 +1,525 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}تنظیمات برنامه{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================
+   صفحه تنظیمات
+   ========================================= */
+
+.settings-page {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+
+/* عنوان صفحه */
+
+.settings-header {
+    background: #0d6efd;
+    color: white;
+    border-radius: 12px 12px 0 0;
+    padding: 14px 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings-header-title {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+/* بدنه */
+
+.settings-body {
+    background: #f8f9fa;
+    padding: 18px;
+    border-radius: 0 0 12px 12px;
+}
+
+
+/* =========================================
+   کارت هر تنظیم
+   ========================================= */
+
+.setting-card {
+    background: white;
+    border: 1px solid #e1e5ea;
+    border-radius: 10px;
+
+    padding: 14px 16px;
+
+    height: 100%;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+
+    transition: all 0.2s ease;
+}
+
+.setting-card:hover {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+}
+
+
+/* عنوان کارت */
+
+.setting-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 8px;
+
+    color: #343a40;
+}
+
+
+/* مقدار فعلی */
+
+.setting-display {
+    min-height: 38px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 7px 10px;
+
+    background: #f8f9fa;
+
+    border: 1px solid #dee2e6;
+
+    border-radius: 7px;
+
+    color: #495057;
+
+    font-size: 13px;
+}
+
+
+/* ورودی */
+
+.setting-input {
+    font-size: 13px;
+}
+
+
+/* =========================================
+   لوگو
+   ========================================= */
+
+.logo-card {
+    background: white;
+
+    border: 1px solid #e1e5ea;
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.logo-preview {
+    max-height: 85px;
+
+    max-width: 180px;
+
+    object-fit: contain;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    padding: 5px;
+
+    background: white;
+}
+
+
+/* =========================================
+   توضیحات ثابت
+   ========================================= */
+
+.description-card textarea {
+    resize: vertical;
+    min-height: 75px;
+}
+
+
+/* =========================================
+   دکمه ها
+   ========================================= */
+
+.settings-actions {
+    margin-top: 16px;
+
+    display: flex;
+
+    justify-content: flex-start;
+
+    gap: 8px;
+}
+
+
+/* =========================================
+   موبایل
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .settings-body {
+        padding: 12px;
+    }
+
+    .settings-header {
+        padding: 12px 15px;
+    }
+
+    .settings-header-title {
+        font-size: 17px;
+    }
+
+    .setting-card {
+        padding: 12px;
+    }
+
+}
+
+</style>
+
+
+<div class="settings-page">
+
+    <!-- =========================================
+         عنوان
+         ========================================= -->
+
+    <div class="settings-header">
+
+        <div class="settings-header-title">
+            ⚙️ تنظیمات برنامه
+        </div>
+
+        <a href="{{ back_url|default('/') }}"
+           class="btn btn-light btn-sm">
+
+            ↩ بازگشت
+
+        </a>
+
+    </div>
+
+
+    <div class="settings-body">
+
+        <form action="/settings/save"
+              method="POST"
+              enctype="multipart/form-data">
+
+
+            <!-- =========================================
+                 تنظیمات اصلی - سه ستونه
+                 ========================================= -->
+
+            <div class="row g-3">
+
+
+                <!-- نام فروشگاه -->
+
+                <div class="col-md-4">
+
+                    <div class="setting-card setting-item">
+
+                        <div class="setting-title">
+                            🏪 نام فروشگاه
+                        </div>
+
+                        <div class="setting-display">
+                            {{ settings.shop_name or 'تعیین نشده' }}
+                        </div>
+
+                        <input
+                            class="form-control setting-input d-none"
+                            name="shop_name"
+                            value="{{ settings.shop_name or '' }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- تلفن -->
+
+                <div class="col-md-4">
+
+                    <div class="setting-card setting-item">
+
+                        <div class="setting-title">
+                            ☎️ تلفن
+                        </div>
+
+                        <div class="setting-display">
+                            {{ settings.phone or 'تعیین نشده' }}
+                        </div>
+
+                        <input
+                            class="form-control setting-input d-none"
+                            name="phone"
+                            value="{{ settings.phone or '' }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- درصد مالیات -->
+
+                <div class="col-md-4">
+
+                    <div class="setting-card setting-item">
+
+                        <div class="setting-title">
+                            🧾 درصد مالیات
+                        </div>
+
+                        <div class="setting-display">
+                            {{ settings.vat_percent or 10 }}٪
+                        </div>
+
+                        <input
+                            type="number"
+                            step="0.1"
+                            class="form-control setting-input d-none"
+                            name="vat_percent"
+                            value="{{ settings.vat_percent or 10 }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- شماره کارت -->
+
+                <div class="col-md-4">
+
+                    <div class="setting-card setting-item">
+
+                        <div class="setting-title">
+                            💳 شماره کارت
+                        </div>
+
+                        <div class="setting-display">
+                            {{ settings.card_number or 'تعیین نشده' }}
+                        </div>
+
+                        <input
+                            class="form-control setting-input d-none"
+                            name="card_number"
+                            value="{{ settings.card_number or '' }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- نام صاحب کارت -->
+
+                <div class="col-md-4">
+
+                    <div class="setting-card setting-item">
+
+                        <div class="setting-title">
+                            👤 نام صاحب کارت
+                        </div>
+
+                        <div class="setting-display">
+                            {{ settings.card_holder or 'تعیین نشده' }}
+                        </div>
+
+                        <input
+                            class="form-control setting-input d-none"
+                            name="card_holder"
+                            value="{{ settings.card_holder or '' }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- آدرس -->
+
+                <div class="col-md-4">
+
+                    <div class="setting-card setting-item">
+
+                        <div class="setting-title">
+                            📍 آدرس
+                        </div>
+
+                        <div class="setting-display">
+                            {{ settings.address or 'تعیین نشده' }}
+                        </div>
+
+                        <textarea
+                            class="form-control setting-input d-none"
+                            rows="2"
+                            name="address"
+                        >{{ settings.address or '' }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =========================================
+                 توضیحات ثابت
+                 ========================================= -->
+
+            <div class="logo-card description-card mt-3 setting-item">
+
+                <div class="setting-title">
+                    📝 توضیحات پیش‌فرض فاکتور
+                </div>
+
+                <div class="setting-display">
+                    {{ settings.default_description or 'توضیحات پیش‌فرض تعیین نشده' }}
+                </div>
+
+                <textarea
+                    class="form-control setting-input d-none"
+                    name="default_description"
+                    rows="3"
+                    placeholder="مثلاً: مبلغ فوق به صورت کامل دریافت شد."
+                >{{ settings.default_description or '' }}</textarea>
+
+                <small class="text-muted d-block mt-2">
+                    این متن هنگام صدور فاکتور به صورت خودکار در قسمت توضیحات قرار می‌گیرد و در صورت نیاز قابل تغییر است.
+                </small>
+
+            </div>
+
+
+            <!-- =========================================
+                 لوگو
+                 ========================================= -->
+
+            <div class="logo-card mt-3">
+
+                <div class="setting-title">
+                    🖼️ لوگو
+                </div>
+
+                <div class="d-flex align-items-center gap-3 flex-wrap">
+
+                    {% if settings.logo %}
+
+                        <img
+                            src="{{ url_for('static', filename='uploads/' + settings.logo) }}"
+                            class="logo-preview"
+                        >
+
+                    {% endif %}
+
+                    <input
+                        type="file"
+                        class="form-control setting-input d-none"
+                        name="logo"
+                        id="logoInput"
+                        accept="image/*"
+                    >
+
+                </div>
+
+                <small class="text-muted d-block mt-2">
+                    پیشنهاد: تصویر لوگو با پس‌زمینه شفاف و کیفیت مناسب بارگذاری شود.
+                </small>
+
+            </div>
+
+
+            <!-- =========================================
+                 دکمه ها
+                 ========================================= -->
+
+            <div class="settings-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="editBtn">
+
+                    ✏️ ویرایش
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-success d-none"
+                    id="saveBtn">
+
+                    💾 ذخیره تنظیمات
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const editBtn = document.getElementById('editBtn');
+
+    const saveBtn = document.getElementById('saveBtn');
+
+    const displays =
+        document.querySelectorAll('.setting-display');
+
+    const inputs =
+        document.querySelectorAll('.setting-input');
+
+
+    editBtn.addEventListener('click', function() {
+
+        inputs.forEach(function(input) {
+            input.classList.remove('d-none');
+        });
+
+
+        displays.forEach(function(display) {
+            display.classList.add('d-none');
+        });
+
+
+        editBtn.classList.add('d-none');
+
+        saveBtn.classList.remove('d-none');
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

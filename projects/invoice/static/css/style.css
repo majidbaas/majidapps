@@ -1,0 +1,101 @@
+/* تنظیمات عمومی و کانتینر یکپارچه */
+body {
+    background: #f4f6f9;
+    font-family: Tahoma, sans-serif;
+}
+
+.main-container {
+    max-width: 800px; /* عرض محدود برای جمع‌وجور شدن */
+    padding: 0 15px;
+}
+
+.card {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.card-header {
+    background: #2f6fed;
+    color: white;
+    border-radius: 14px 14px 0 0 !important;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* ============================================
+   منوی شناور یکپارچه (گوشه راست بالا)
+============================================ */
+.floating-menu {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.menu-toggle {
+    width: 50px;
+    height: 50px;
+    background: #17324d;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+.menu-toggle:hover { transform: scale(1.05); }
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.menu-buttons.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.action-btn {
+    display: block;
+    padding: 10px 20px;
+    width: 160px;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    background: white;
+    color: #17324d;
+    border: 1px solid #ddd;
+}
+.action-btn:hover { transform: translateX(-5px); }
+
+/* رنگ‌های دکمه‌های منو */
+.home-btn { background: #007bff; color: white; }
+.new-btn { background: #28a745; color: white; }
+.list-btn { background: #6610f2; color: white; }
+.settings-btn { background: #6c757d; color: white; }

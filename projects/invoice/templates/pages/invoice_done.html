@@ -1,0 +1,31 @@
+<div class="invoice-wrapper">
+
+    {% include "invoice_body.html" %}
+
+</div>
+
+<div class="buttons">
+
+    <button onclick="window.print()">
+        چاپ
+    </button>
+
+    <button id="pdf">
+        PDF
+    </button>
+
+    <button id="image">
+        تصویر
+    </button>
+
+    <a href="/invoice/new">
+        فاکتور جدید
+    </a>
+
+</div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script src="{{ url_for('static',filename='js/invoice_done.js') }}"></script>

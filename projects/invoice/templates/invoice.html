@@ -1,335 +1,541 @@
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-    <meta charset="UTF-8">
-    <title>فاکتور</title>
-    <!-- html2canvas برای تبدیل به تصویر -->
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+{% extends "layouts/base.html" %}
+
+{% block title %}
+پیش نمایش فاکتور
+{% endblock %}
+
+
+{% block extra_head %}
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/invoice.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap"
+          rel="stylesheet">
+
 
     <style>
-        @font-face {
-            font-family: "Vazir";
-            src: url("/invoice/static/fonts/arial.ttf") format("truetype");
+
+        /* =========================================
+           نوار پایین Preview
+           ========================================= */
+
+        .preview-bottom-nav {
+
+            position: fixed;
+
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            height: 70px;
+
+            background: #ffffff;
+
+            border-top: 1px solid #d8d8d8;
+
+            box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.12);
+
+            display: flex;
+
+            align-items: stretch;
+
+            justify-content: center;
+
+            direction: rtl;
+
+            z-index: 9999;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+
+        /* دکمه‌ها */
+
+        .preview-nav-item {
+
+            flex: 1;
+
+            max-width: 220px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 4px;
+
+            text-decoration: none;
+
+            color: #333;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            background: transparent;
+
+            border: none;
+
+            cursor: pointer;
+
+            transition: background 0.2s, color 0.2s;
         }
+
+
+        /* آیکون */
+
+        .preview-nav-icon {
+
+            font-size: 22px;
+
+            line-height: 1;
+        }
+
+
+        /* هاور */
+
+        .preview-nav-item:hover {
+
+            background: #f1f5f9;
+        }
+
+
+        /* رنگ دکمه‌ها */
+
+        .preview-home:hover {
+            color: #0d6efd;
+        }
+
+        .preview-new:hover {
+            color: #198754;
+        }
+
+        .preview-list:hover {
+            color: #6f42c1;
+        }
+
+        .preview-edit:hover {
+            color: #fd7e14;
+        }
+
+
+        /* دکمه ثبت نهایی */
+
+        .preview-save {
+
+            color: #198754;
+
+            font-weight: 800;
+        }
+
+        .preview-save:hover {
+
+            background: #eaf7ef;
+
+            color: #146c43;
+        }
+
+
+        /* فضای پایین صفحه */
 
         body {
-            direction: rtl;
-            font-family: "Vazir", Tahoma, sans-serif;
-            font-size: 14px;
-            background: #f0f2f5;
-            padding: 20px;
+
+            padding-bottom: 85px;
         }
 
-        /* ===== کانتینر اصلی فاکتور ===== */
-        #invoice-content {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px 35px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            overflow: hidden; /* مهم برای floatها */
+
+        /* =========================================
+           موبایل
+           ========================================= */
+
+        @media (max-width: 600px) {
+
+            .preview-bottom-nav {
+
+                height: 68px;
+            }
+
+            .preview-nav-item {
+
+                max-width: none;
+
+                font-size: 10px;
+
+                gap: 3px;
+            }
+
+            .preview-nav-icon {
+
+                font-size: 20px;
+            }
+
+            body {
+
+                padding-bottom: 78px;
+            }
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
 
-        th, td {
-            border: 1px solid #333;
-            padding: 8px 10px;
-            text-align: center;
-        }
-
-        th {
-            background: #e9ecef;
-            font-weight: bold;
-        }
-
-        .title {
-            text-align: center;
-            font-size: 24px;
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-
-        .left {
-            float: left;
-            text-align: left;
-        }
-
-        .right {
-            float: right;
-            text-align: right;
-            margin-top: 85px;
-        }
-
-        /* ===== تمیز کردن floatها ===== */
-        .clearfix::after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /* ===== بخش جمع و توضیحات (چیدمان نهایی) ===== */
-        .bottom-section {
-            width: 100%;
-            margin-top: 20px;
-            overflow: hidden; /* جلوگیری از سرریز */
-        }
-
-        .summary-box {
-            width: 50%;
-            float: left; /* ← جدول جمع در چپ */
-            border: 1px solid #999;
-            background: #fff;
-        }
-
-        .summary-table {
-            width: 100%;
-            border: 1px solid black;
-            margin: 0;
-        }
-
-        .summary-table td {
-            border: 1px solid black;
-            padding: 9px 5px;
-        }
-
-        .summary-table td:last-child {
-            text-align: left;
-            direction: ltr;
-        }
-
-        .summary-table td:first-child {
-            text-align: right;
-            font-weight: bold;
-        }
-
-        .summary-table tr:last-child td {
-            font-size: 16px;
-            font-weight: bold;
-            background: #d9edf7;
-        }
-
-        .notes-box {
-            width: 47%;
-            float: right; /* ← توضیحات در راست */
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-            min-height: 120px;
-        }
-
-        .signatures {
-            margin-top: 35px;
-            clear: both;
-            overflow: hidden;
-        }
-
-        .seller-sign {
-            float: right;
-            font-weight: bold;
-            border-top: 1px solid #333;
-            padding-top: 8px;
-            min-width: 120px;
-            text-align: center;
-        }
-
-        .buyer-sign {
-            float: left;
-            font-weight: bold;
-            border-top: 1px solid #333;
-            padding-top: 8px;
-            min-width: 120px;
-            text-align: center;
-        }
-
-        /* ===== دکمه‌های عملیات ===== */
-        .actions {
-            max-width: 900px;
-            margin: 20px auto 0;
-            text-align: center;
-            padding: 15px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.3s, transform 0.1s;
-            margin: 5px 8px;
-            font-family: "Vazir", Tahoma, sans-serif;
-        }
-
-        .btn-success { background: #27ae60; color: white; }
-        .btn-success:hover { background: #219a52; }
-        .btn-primary { background: #3498db; color: white; }
-        .btn-primary:hover { background: #2e86c1; }
-        .btn-secondary { background: #6c757d; color: white; }
-        .btn-secondary:hover { background: #5a6268; }
-        .btn-danger { background: #e74c3c; color: white; }
-        .btn-danger:hover { background: #c0392b; }
+        /* =========================================
+           چاپ
+           ========================================= */
 
         @media print {
-            .no-print { display: none !important; }
-            body { background: white; padding: 0; }
-            #invoice-content { box-shadow: none; border-radius: 0; padding: 20px; }
+
+            .preview-bottom-nav {
+
+                display: none !important;
+            }
+
+            body {
+
+                padding-bottom: 0 !important;
+            }
+
+            .no-print {
+
+                display: none !important;
+            }
         }
 
-        @media (max-width: 700px) {
-            .right, .left { float: none; text-align: center; margin-top: 10px; }
-            .summary-box, .notes-box { width: 100%; float: none; }
-            .bottom-section { flex-direction: column; }
-            .signatures { flex-direction: column; align-items: center; gap: 20px; }
-            .seller-sign, .buyer-sign { width: 80%; float: none; margin: 0 auto; }
-            .btn { display: block; width: 90%; margin: 8px auto; }
-        }
     </style>
-</head>
-<body>
+ {% endblock %}
+{% block content %}
 
-<!-- ===== فاکتور ===== -->
-<div id="invoice-content">
 
-    <h2 class="title">📄 فاکتور فروش</h2>
+    <!-- =========================================
+         خود فاکتور
+         ========================================= -->
 
-    <div class="left">
-        <p><strong>شماره فاکتور:</strong> {{ invoice_number|fa }}</p>
-        <p><strong>تاریخ:</strong> {{ invoice_date|fa }}</p>
-    </div>
+    <div class="invoice-container">
 
-    <div class="right">
-        <p>
-            <strong>فروشنده:</strong> {{ seller }}  
-            <span style="margin-right: 20px;"><strong>تلفن:</strong> {{ seller_phone|fa }}</span>
-            <span style="margin-right: 20px;"><strong>آدرس:</strong> {{ seller_address }}</span>
-        </p>
-        <p>
-            <strong>خریدار:</strong> {{ buyer }}  
-            <span style="margin-right: 20px;"><strong>تلفن:</strong> {{ buyer_phone|fa }}</span>
-            <span style="margin-right: 20px;"><strong>آدرس:</strong> {{ buyer_address }}</span>
-        </p>
-    </div>
 
-    <div style="clear:both;"></div>
+        <!-- هدر -->
 
-    <!-- جدول اصلی کالاها -->
-    <table>
-        <tr>
-            <th>شرح</th>
-            <th>تعداد</th>
-            <th>قیمت واحد</th>
-            <th>مبلغ</th>
-        </tr>
-        {% for item in items %}
-        <tr>
-            <td>{{ item.title }}</td>
-            <td>{{ "{:,.0f}".format(item.quantity)|fa }}</td>
-            <td>{{ "{:,.0f}".format(item.price)|fa }}</td>
-            <td>{{ "{:,.0f}".format(item.subtotal)|fa }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+        <header class="invoice-header">
 
-    <!-- ===== بخش جمع و توضیحات (چیدمان درست) ===== -->
-    <div class="bottom-section">
-        <div class="summary-box">
-            <table class="summary-table">
-                <tr><td>جمع کل</td><td>{{ "{:,.0f}".format(total_before_discount)|fa }}</td></tr>
-                <tr><td>تخفیف</td><td>{{ "{:,.0f}".format(total_discount)|fa }}</td></tr>
-                <tr><td>مالیات</td><td>{{ "{:,.0f}".format(vat_amount)|fa }}</td></tr>
-                <tr><td><strong>مبلغ نهایی</strong></td><td><strong>{{ "{:,.0f}".format(total_after_discount)|fa }}</strong></td></tr>
-            </table>
+            <div class="header-left">
+
+                <div class="invoice-number">
+                    شماره:
+                    <strong>-</strong>
+                </div>
+
+                <div class="invoice-date">
+                    تاریخ:
+                    <strong>{{ invoice_date|fa }}</strong>
+                </div>
+
+            </div>
+
+
+            <div class="header-center">
+
+                <h1 class="invoice-title">
+                    فاکتور فروش
+                </h1>
+
+            </div>
+
+
+            <div class="header-right">
+
+                {% if settings.logo %}
+
+                <img
+                    src="{{ url_for('static', filename='uploads/' + settings.logo) }}"
+                    class="company-logo"
+                />
+
+                {% endif %}
+
+                <div class="company-name">
+                    {{ seller }}
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="header-divider"></div>
+
+
+        <!-- محتوای داخلی -->
+
+        <div class="invoice-content-scroll">
+
+
+            <!-- اطلاعات خریدار -->
+
+            <section class="buyer-section">
+
+                <div class="buyer-row">
+
+                    <span>
+                        <strong>خریدار:</strong>
+                        {{ buyer }}
+                    </span>
+
+                    <span>
+                        <strong>تلفن:</strong>
+                        {{ buyer_phone }}
+                    </span>
+
+                    <span>
+                        <strong>کد ملی:</strong>
+                        -
+                    </span>
+
+                    <span>
+                        <strong>کد اقتصادی:</strong>
+                        -
+                    </span>
+
+                </div>
+
+
+                <div class="buyer-row">
+
+                    <span>
+                        <strong>آدرس:</strong>
+                        {{ buyer_address }}
+                    </span>
+
+                    <span>
+                        <strong>کد پستی:</strong>
+                        -
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- جدول کالا -->
+
+            <section class="items-section">
+
+                <table class="items-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th style="width: 30%;">
+                                شرح کالا
+                            </th>
+
+                            <th style="width: 12%;">
+                                تعداد
+                            </th>
+
+                            <th style="width: 16%;">
+                                قیمت واحد
+                            </th>
+
+                            <th style="width: 16%;">
+                                مبلغ
+                            </th>
+
+                            <th style="width: 12%;">
+                                تخفیف
+                            </th>
+
+                            <th style="width: 14%;">
+                                مبلغ نهایی
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in items %}
+
+                        <tr>
+
+                            <td>
+                                {{ item.title }}
+                            </td>
+
+                            <td>
+                                {{ to_persian_number(item.quantity) }}
+                            </td>
+
+                            <td class="money">
+                                {{ to_persian_number(item.price) }}
+                            </td>
+
+                            <td class="money">
+                                {{ to_persian_number(item.quantity * item.price) }}
+                            </td>
+
+                            <td class="money">
+                                {{ to_persian_number(item.discount) }}
+                            </td>
+
+                            <td class="money">
+                                {{ to_persian_number(item.final_price) }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </section>
+
+
+            <!-- جمع کل -->
+
+            <div class="summary-wrapper">
+
+                <table class="summary-table">
+
+                    <tr>
+
+                        <td>
+                            جمع کالاها
+                        </td>
+
+                        <td>
+                            {{ to_persian_number(total_before_discount) }}
+                            ریال
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            تخفیف
+                        </td>
+
+                        <td>
+                            {{ to_persian_number(total_discount) }}
+                            ریال
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            مالیات
+                            ({{ to_persian_number(vat_percent) }}٪)
+                        </td>
+
+                        <td>
+                            {{ to_persian_number(vat_amount) }}
+                            ریال
+                        </td>
+
+                    </tr>
+
+
+                    <tr class="grand-total">
+
+                        <td>
+                            مبلغ قابل پرداخت
+                        </td>
+
+                        <td>
+                            {{ to_persian_number(total_after_discount) }}
+                            ریال
+                        </td>
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <!-- توضیحات، کارت و امضا -->
+
+            <section class="payment-section">
+
+
+                <div class="description-box">
+
+                    <h3>
+                        توضیحات
+                    </h3>
+
+                    {% if description %}
+
+                    <p>
+                        {{ description }}
+                    </p>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="card-box">
+
+                    <div>
+                        <strong>شماره کارت :</strong>
+                        {{ card_number|fa }}
+                    </div>
+
+                    <div>
+                        <strong>بنام :</strong>
+                        {{ card_number_name }}
+                    </div>
+
+                </div>
+
+
+                <div class="signature-box">
+
+                    <div>
+                        امضاء فروشنده
+                    </div>
+
+                    <div>
+                        امضاء خریدار
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+           
+
         </div>
+ <!-- فوتر -->
 
-        <div class="notes-box">
-            {% if description and description != "-" %}
-            <p><strong>توضیحات:</strong><br>{{ description }}</p>
-            {% endif %}
-            <p>
-                <strong>شماره کارت:</strong> {{ card_number|fa }}
-                <span style="margin-right: 40px;"><strong>بنام:</strong> {{ card_number_name }}</span>
-            </p>
-        </div>
+            <footer class="invoice-footer">
+
+                <div>
+                    <strong>آدرس :</strong>
+                    {{ seller_address }}
+                </div>
+
+                <div>
+                    <strong>تلفن :</strong>
+                    {{ seller_phone|fa }}
+                </div>
+
+            </footer>
+
     </div>
 
-    <div style="clear:both;"></div>
 
-    <!-- امضاها -->
-    <div class="signatures">
-        <div class="seller-sign">امضاء فروشنده</div>
-        <div class="buyer-sign">امضاء خریدار</div>
-    </div>
-
-</div>
-
-<!-- ===== دکمه‌های عملیات ===== -->
-<div class="actions no-print">
-    <button class="btn btn-success" onclick="downloadImage()">📥 دانلود به صورت تصویر</button>
-    <button class="btn btn-primary" onclick="window.print()">🖨️ چاپ</button>
-    <a href="/invoice" class="btn btn-secondary">🔙 بازگشت به فرم</a>
-    <a href="/" class="btn btn-danger">🏠 صفحه اصلی</a>
-</div>
-
-<!-- ===== اسکریپت تبدیل به تصویر ===== -->
-<script>
-    function downloadImage() {
-        const element = document.getElementById('invoice-content');
-        const btn = document.querySelector('.btn-success');
-        const originalText = btn.innerText;
-
-        btn.innerText = '⏳ در حال پردازش...';
-        btn.disabled = true;
-
-        html2canvas(element, {
-            scale: 3, // کیفیت بالا
-            useCORS: true,
-            backgroundColor: '#ffffff',
-            logging: false,
-            allowTaint: true,
-            width: element.scrollWidth,
-            height: element.scrollHeight,
-            windowWidth: element.scrollWidth,
-            windowHeight: element.scrollHeight
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `فاکتور-${new Date().toLocaleDateString('fa-IR')}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }).catch(error => {
-            alert('❌ خطا در تبدیل به تصویر. لطفاً دوباره تلاش کنید.');
-            console.error('html2canvas error:', error);
-            btn.innerText = originalText;
-            btn.disabled = false;
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('فاکتور آماده است.');
-    });
-</script>
-
-</body>
-</html>
+{% endblock %}

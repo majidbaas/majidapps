@@ -1,0 +1,78 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}صفحه اصلی{% endblock %}
+
+{% block content %}
+
+<style>
+    .home-welcome {
+        max-width: 700px;
+        margin: 100px auto 40px;
+        text-align: center;
+        padding: 50px 30px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    .welcome-icon {
+        font-size: 55px;
+        margin-bottom: 20px;
+    }
+
+    .home-welcome h1 {
+        font-size: 30px;
+        font-weight: 800;
+        margin-bottom: 10px;
+        color: #17324d;
+    }
+
+    .welcome-subtitle {
+        font-size: 17px;
+        color: #6c757d;
+        margin-bottom: 25px;
+    }
+
+    .welcome-divider {
+        width: 80px;
+        height: 3px;
+        background: #0d6efd;
+        margin: 0 auto 25px;
+        border-radius: 10px;
+    }
+
+    .welcome-text {
+        color: #6c757d;
+        line-height: 2;
+        margin: 0;
+    }
+</style>
+
+
+<div class="home-welcome">
+
+    <div class="welcome-icon">
+        🧾
+    </div>
+
+    <h1>سیستم فاکتور فروش</h1>
+
+    <p class="welcome-subtitle">
+        مدیریت ساده و سریع فاکتورهای فروش
+    </p>
+
+    <div class="welcome-divider"></div>
+
+    <p class="welcome-text">
+        به سیستم فاکتور خوش آمدید.
+       
+    </p>
+	 <p class="welcome-text">
+        
+       برای شروع از قسمت تنظیمات، اطلاعات اولیه را ثبت کنید.
+    </p>
+
+</div>
+
+
+{% endblock %}

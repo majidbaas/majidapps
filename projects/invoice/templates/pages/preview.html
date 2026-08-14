@@ -1,0 +1,23 @@
+<div class="invoice-wrapper">
+
+    {% include "invoice_body.html" %}
+
+</div>
+
+<div class="buttons">
+
+    <button type="button" onclick="window.history.back()">
+        ویرایش
+    </button>
+
+    <form action="/save_invoice" method="post">
+
+        <!-- تمام اطلاعات فرم -->
+
+        <button type="submit">
+            ثبت نهایی
+        </button>
+
+    </form>
+
+</div>

@@ -1,0 +1,564 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap');
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #e8edf3;
+    font-family: "Vazirmatn", sans-serif;
+    direction: rtl;
+    color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.invoice-container {
+    width: 210mm;
+    max-width: 100%;
+    height: 297mm;
+    max-height: 100vh;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    padding: 10px 20px 20px 20px; /* پدینگ بالا کاهش یافت (سربرگ بالاتر رفت) */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.invoice-content-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-left: 5px;
+}
+/* =========================================
+   ساختار صفحه پیش نمایش فاکتور
+   ========================================= */
+
+.invoice-container {
+    width: 100%;
+    max-width: 1000px;
+    height: calc(100vh - 85px);
+
+    margin: 20px auto 0;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+}
+
+
+/* هدر ثابت */
+
+.invoice-header {
+    flex-shrink: 0;
+}
+
+
+/* جداکننده هدر */
+
+.header-divider {
+    flex-shrink: 0;
+}
+
+
+/* فقط محتوای فاکتور اسکرول شود */
+
+.invoice-content-scroll {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 0 22px;
+}
+
+
+/* فوتر ثابت */
+
+.invoice-footer {
+    flex-shrink: 0;
+}
+
+
+/* =========================================
+   اسکرول بار
+   ========================================= */
+
+.invoice-content-scroll::-webkit-scrollbar {
+    width: 7px;
+}
+
+.invoice-content-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.invoice-content-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.invoice-content-scroll::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+
+/* =========================================
+   چاپ
+   ========================================= */
+
+@media print {
+
+    .invoice-container {
+        width: 100%;
+        max-width: none;
+
+        height: auto;
+
+        margin: 0;
+
+        overflow: visible;
+
+        box-shadow: none;
+
+        border-radius: 0;
+    }
+
+    .invoice-content-scroll {
+        overflow: visible;
+
+        padding: 0;
+    }
+
+    .invoice-header,
+    .invoice-footer {
+        position: static;
+    }
+}
+/* استایل اسکرول بار */
+.invoice-content-scroll::-webkit-scrollbar { width: 6px; }
+.invoice-content-scroll::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+.invoice-content-scroll::-webkit-scrollbar-thumb { background: #17324d; border-radius: 10px; }
+
+/* ===========================
+   HEADER (بالاتر رفتن + گردی)
+=========================== */
+.invoice-header {
+    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: 180px 1fr 180px;
+    align-items: center;
+    direction: ltr;
+    margin-top: 5px; /* کاهش فاصله از بالا */
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    
+    border: 1px solid #d1d5db;
+    border-radius: 16px;
+    background: #fcfcfd;
+}
+
+.header-left {
+    border: 1px solid #d9d9d9;
+    border-radius: 14px;
+    padding: 8px 15px;
+    background: #fafafa;
+    line-height: 1.6;
+    font-size: 14px;
+    text-align: right;
+    direction: rtl;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 2px;
+}
+
+.header-center { text-align: center; direction: rtl; }
+.header-right { padding-right: 10px; text-align: right; direction: rtl; }
+
+.company-logo { width: 65px; max-height: 65px; object-fit: contain; margin: 0 auto 5px; display: block; }
+.invoice-title { margin: 5px 0; font-size: 28px; font-weight: 800; color: #17324d; }
+.company-name { font-size: 18px; font-weight: 700; color: #17324d; text-align: center; }
+.header-divider { width: 100%; height: 1px; background: #d9dfe5; margin: 10px 0; flex-shrink: 0; }
+
+/* ==========================
+   اطلاعات خریدار (نسخه تضمینی برای WeasyPrint)
+=========================== */
+.buyer-section {
+    border: 1px solid #d9dfe6;
+    border-radius: 14px;
+    /* استفاده از block و padding حداقل */
+    display: block;
+    padding: 6px 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.buyer-row {
+    display: block;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.buyer-row span {
+    display: inline-block;
+    margin-left: 20px; /* فاصله بین اطلاعات */
+    white-space: nowrap;
+}
+/* ==========================
+   جدول کالا (گردی تضمینی)
+=========================== */
+.items-section { margin-top: 5px; }
+.items-table {
+    width: 100%;
+    /* استفاده از separate برای گردی حاشیه در WeasyPrint */
+    border-collapse: separate; 
+    border-spacing: 0;
+    border: 1px solid #e1e5ea;
+    border-radius: 14px;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+.items-table thead th {
+    background: #f3f4f6;
+    color: #1a2b3c;
+    padding: 12px 10px;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 1px solid #e1e5ea;
+}
+
+.items-table tbody td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #edf0f3;
+}
+.items-table .money { font-family: Vazirmatn, sans-serif; direction: ltr; text-align: center; white-space: nowrap; }
+
+
+/* ============================================
+   منوی شناور سمت چپ (حرفه‌ای و تمیز)
+============================================ */
+.floating-menu {
+    position: fixed;
+    top: 20px;
+    right: 20px; /* به سمت چپ منتقل شد */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.menu-toggle {
+    width: 50px;
+    height: 50px;
+    background: #17324d;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s;
+}
+.menu-toggle:hover { transform: scale(1.05); }
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+    opacity: 0;
+    transform: translateX(-20px);
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.menu-buttons.show {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+}
+.list-btn { background: #6610f2; color: white; } /* رنگ بنفش برای لیست فاکتورها */
+.action-btn {
+    display: block;
+    padding: 10px 20px;
+    width: 160px;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+.action-btn:hover { transform: translateX(5px); }
+
+.save-btn { background: #28a745; color: white; }
+.new-btn { background: #17a2b8; color: white; }
+.edit-btn { background: #ffc107; color: #333; }
+.settings-btn { background: #6c757d; color: white; }
+.home-btn { background: #007bff; color: white; }
+/* ==========================
+   جمع کل (گردی تضمینی)
+=========================== */
+.summary-wrapper { width: 100%; display: flex; justify-content: flex-end; margin-top: 15px; margin-bottom: 15px; }
+.summary-table {
+    width: 350px;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    /* کلید گردی */
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    background: #fafafa;
+    font-size: 14px;
+}
+.summary-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid #eee;
+}
+.summary-table .grand-total {
+    background: #dcecff;
+    font-size: 16px;
+    font-weight: 900;
+    border-top: 2px solid #17324d;
+}
+
+/* ==========================
+   توضیحات، کارت، امضا
+=========================== */
+.payment-section { font-size: 14px; margin-top: 15px; }
+
+.description-box {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    min-height: 40px;
+    text-align: right;
+}
+.description-box h3 {
+    margin: 0 0 6px 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #17324d;
+}
+.description-box p { margin: 0; }
+
+.card-box {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+}
+
+.signature-box { display: flex; justify-content: space-between; padding: 0 40px; }
+.signature-box div {
+    width: 150px;
+    text-align: center;
+    border: none;
+}
+
+/* ==========================
+   فوتر (چسبیدن به پایین با گردی)
+=========================== */
+.invoice-footer {
+    flex-shrink: 0;
+    margin-top: auto; /* کلید چسبیدن به پایین در حالت نمایش */
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    color: #555;
+    
+    border: 1px solid #d1d5db;
+    border-radius: 16px;
+    background: #fcfcfd;
+}
+
+/* ==========================
+   تنظیمات چاپ (مخصوص WeasyPrint و صفحات چندگانه)
+=========================== */
+@page {
+    size: A4;
+    margin: 15mm;
+}
+
+@media print {
+    body { background: white; padding: 0; margin: 0; display: block; }
+    
+    .invoice-container {
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        overflow: visible !important;
+        display: block !important;
+    }
+
+    .invoice-content-scroll {
+        overflow: visible !important;
+        height: auto !important;
+        display: block !important;
+        padding: 0 !important;
+    }
+
+    .invoice-header {
+        border: 1px solid #ddd !important;
+        border-radius: 16px !important;
+        margin-bottom: 20px !important;
+        padding: 12px 15px !important;
+        background: #fcfcfd !important;
+        margin-top: 0 !important;
+    }
+
+    /* ==========================================
+       ترفند طلایی برای چسبیدن فوتر به ته برگه
+    ========================================== */
+    .invoice-footer {
+        border: 1px solid #ddd !important;
+        border-radius: 16px !important;
+        background: #fcfcfd !important;
+        
+        /* در پرینت با استفاده از position: absolute به پایین می‌چسبد */
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        padding: 15px !important;
+        margin: 0 !important;
+    }
+
+    .items-table tbody tr, .summary-wrapper, .payment-section {
+        page-break-inside: avoid !important;
+    }
+}
+
+/* =========================================
+   حالت Preview فاکتور
+   ========================================= */
+
+.preview-page {
+    overflow: hidden !important;
+    padding-bottom: 0 !important;
+}
+
+
+/* خود فاکتور */
+
+.preview-page .invoice-container {
+    width: 100%;
+    max-width: 1000px;
+
+    height: calc(100vh - 70px);
+
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: #fff;
+
+    border-radius: 0 0 20px 20px;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+}
+
+
+/* هدر ثابت */
+
+.preview-page .invoice-header {
+    flex-shrink: 0;
+}
+
+
+/* خط زیر هدر */
+
+.preview-page .header-divider {
+    flex-shrink: 0;
+}
+
+
+/* فقط این قسمت اسکرول شود */
+
+.preview-page .invoice-content-scroll {
+    flex: 1;
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+/* فوتر ثابت */
+
+.preview-page .invoice-footer {
+    flex-shrink: 0;
+}
+
+
+/* اسکرول بار داخلی */
+
+.preview-page .invoice-content-scroll::-webkit-scrollbar {
+    width: 7px;
+}
+
+.preview-page .invoice-content-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.preview-page .invoice-content-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+
+/* چاپ */
+
+@media print {
+
+    .preview-page {
+        overflow: visible !important;
+        padding-bottom: 0 !important;
+    }
+
+    .preview-page .invoice-container {
+        height: auto;
+        max-width: none;
+        margin: 0;
+
+        overflow: visible;
+
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .preview-page .invoice-content-scroll {
+        overflow: visible;
+    }
+}
