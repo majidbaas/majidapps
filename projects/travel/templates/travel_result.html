@@ -62,7 +62,9 @@
 three-column
 {% elif data["items"]|length > 6 %}
 two-column
-{% endif %}">
+{% endif %}
+"
+data-category="{{ category }}">
 
     <div class="card-header">
 
@@ -81,13 +83,16 @@ two-column
 
     {% for item in data["items"] %}
 
-        <li class="item-row">
+      <li class="item-row"
+    data-name="{{ item['name'] }}">
 
             <label class="item-label">
 
                 <input
-                    type="checkbox"
-                    class="item-checkbox">
+				type="checkbox"
+				class="item-checkbox"
+				data-category="{{ category }}"
+				data-item="{{ item['name'] }}">
 
                 <span class="item-icon">
                     {{ item["icon"] }}
@@ -125,11 +130,23 @@ two-column
 
 </div>
 <div class="actions-container">
+	<button
+		class="submit-btn"
+		id="saveChecklist">
 
+	💾 ذخیره چک لیست
+
+	</button>
     <button class="print-btn" onclick="window.print()">
         🖨 چاپ
     </button>
+	<a
+	href="{{ url_for('travel.my_lists') }}"
+	class="submit-btn">
 
+	📂 چک لیست‌های من
+
+	</a>
     <button
         type="button"
         class="back-link"
@@ -151,5 +168,12 @@ two-column
     setTimeout(() => setStep(3), 100);
   });
 </script>
+
+<script>
+
+const CHECKLIST_ID = "{{ checklist_id }}";
+
+</script>
+
 </body>
 </html>

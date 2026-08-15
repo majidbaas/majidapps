@@ -1,10 +1,9 @@
 import sqlite3
 
-from config import DATABASE_PATH
-
+from .config import DATABASE_PATH
  
 def get_all_invoices():
-    conn = sqlite3.connect('database.db')
+    conn = get_connection()
     c = conn.cursor()
     c.execute("SELECT * FROM invoices ORDER BY id DESC")
     rows = c.fetchall()
@@ -12,7 +11,7 @@ def get_all_invoices():
     return rows
 
 def get_invoice_by_id(invoice_id):
-    conn = sqlite3.connect('database.db')
+    conn = get_connection()
     c = conn.cursor()
     c.execute("SELECT * FROM invoices WHERE id = ?", (invoice_id,))
     row = c.fetchone()
@@ -20,7 +19,7 @@ def get_invoice_by_id(invoice_id):
     return row
 
 def get_invoice_items_by_invoice_id(invoice_id):
-    conn = sqlite3.connect('database.db')
+    conn = get_connection()
     c = conn.cursor()
     c.execute("SELECT * FROM invoice_items WHERE invoice_id = ?", (invoice_id,))
     rows = c.fetchall()

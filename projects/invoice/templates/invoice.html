@@ -7,8 +7,9 @@
 
 {% block extra_head %}
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/invoice.css') }}">
+   <link rel="stylesheet"
+    href="{{ url_for('invoice.static', filename='css/invoice.css') }}">
+
 
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap"
           rel="stylesheet">
@@ -204,6 +205,8 @@
 
     </style>
  {% endblock %}
+ 
+
 {% block content %}
 
 

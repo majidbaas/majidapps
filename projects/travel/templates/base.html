@@ -7,7 +7,8 @@
 
     <title>{% block title %}چک لیست سفر{% endblock %}</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   <link rel="stylesheet"
+      href="{{ url_for('travel.static', filename='style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='icon.png') }}">
 </head>
 
@@ -33,7 +34,7 @@
 </div>
 
 <!-- جاوااسکریپت اصلی -->
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script src="{{ url_for('travel.static', filename='script.js') }}"></script>
 
 <!-- جاوااسکریپت مخصوص هر صفحه -->
 {% block scripts %}{% endblock %}

@@ -296,4 +296,112 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+
+// ===============================
+// Save Checklist
+// ===============================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const saveBtn = document.getElementById("saveChecklist");
+
+    if (!saveBtn) return;
+
+    saveBtn.addEventListener("click", () => {
+
+        const cards = document.querySelectorAll(".category-card");
+
+        let checklist = [];
+
+        cards.forEach(card => {
+
+            const category = card.dataset.category;
+
+            const items = [];
+
+            card.querySelectorAll(".item-row").forEach(row => {
+
+                items.push({
+
+                    name: row.dataset.name,
+
+                    checked: row.querySelector("input").checked
+
+                });
+
+            });
+
+            checklist.push({
+
+                category: category,
+
+                items: items
+
+            });
+
+        });
+
+        const data = {
+
+            id: Date.now(),
+
+            title: document.querySelector("h2").innerText,
+
+            created: new Date().toLocaleDateString("fa-IR"),
+
+            progress: 0,
+
+            checklist: checklist
+
+        };
+
+        let lists = JSON.parse(localStorage.getItem("travelLists") || "[]");
+
+        lists.push(data);
+
+        localStorage.setItem("travelLists", JSON.stringify(lists));
+
+        alert("چک لیست ذخیره شد ✅");
+
+    });
+
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    if (typeof CHECKLIST_ID === "undefined") return;
+
+    const checkboxes = document.querySelectorAll(".item-checkbox");
+
+    const storageKey = "travel_" + CHECKLIST_ID;
+
+    // خواندن وضعیت قبلی
+    const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+
+    checkboxes.forEach(box => {
+
+        const id =
+            box.dataset.category + "_" +
+            box.dataset.item;
+
+        if(saved[id]){
+            box.checked = true;
+        }
+
+        box.addEventListener("change",()=>{
+
+            saved[id]=box.checked;
+
+            localStorage.setItem(
+                storageKey,
+                JSON.stringify(saved)
+            );
+
+        });
+
+    });
+
+});
+
 console.log("END OF SCRIPT");

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}
+چک لیست های من
+{% endblock %}
+
+{% block stepper %}
+<!-- فعلاً چیزی نمایش نده -->
+{% endblock %}
+
+{% block content %}
+
+<div class="my-header">
+
+    <h2>🧳 چک لیست های من</h2>
+
+    
+</div>
+<div class="toolbar">
+
+    <input
+        type="search"
+        placeholder="🔍 جستجوی چک لیست..."
+        class="search-box">
+
+    <select class="sort-box">
+        <option>جدیدترین</option>
+        <option>قدیمی‌ترین</option>
+        <option>درحال انجام</option>
+        <option>تکمیل شده</option>
+    </select>
+
+</div>
+
+<div class="summary-box">
+
+    <div class="summary-item">
+        <strong>12</strong>
+        <span>کل چک لیست</span>
+    </div>
+
+    <div class="summary-item">
+        <strong>3</strong>
+        <span>درحال انجام</span>
+    </div>
+
+    <div class="summary-item">
+        <strong>9</strong>
+        <span>تکمیل شده</span>
+    </div>
+
+</div>
+
+<div id="listsContainer">
+
+</div>
+
+</div>
+
+<div class="actions-container">
+
+    <a href="{{ url_for('travel.index') }}" class="submit-btn">
+        ➕ چک لیست جدید
+    </a>
+
+    <a href="{{ url_for('home') }}" class="btn-back">
+        🏠 صفحه اصلی
+    </a>
+
+</div>
+
+
+<script>
+
+const container = document.getElementById("listsContainer");
+
+const lists =
+    JSON.parse(localStorage.getItem("travelLists") || "[]");
+
+if(lists.length === 0){
+
+    container.innerHTML = `
+        <p class="empty-list">
+            هنوز هیچ چک لیستی ذخیره نشده است.
+        </p>
+    `;
+
+}else{
+
+    lists.forEach(list=>{
+
+        container.innerHTML += `
+
+        <div class="saved-card">
+
+            <h3>${list.title}</h3>
+
+            <p>📅 ${list.created}</p>
+
+            <p>📊 ${list.progress}% تکمیل شده</p>
+
+            <button class="submit-btn">
+                ادامه
+            </button>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+</script>
+
+{% endblock %}

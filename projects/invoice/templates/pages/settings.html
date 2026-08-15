@@ -217,7 +217,7 @@
 
     <div class="settings-body">
 
-        <form action="/settings/save"
+      <form action="{{ url_for('invoice.save_settings_route') }}"
               method="POST"
               enctype="multipart/form-data">
 

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, session , url_for
 import json
 import os
-
+import uuid
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 travel_bp = Blueprint('travel', __name__, 
@@ -76,6 +76,15 @@ def index():
         "index2.html",
         form=session.get("form")
     )
+    # ===== چک لیست های من =====
+
+@travel_bp.route("/my-lists")
+def my_lists():
+    return render_template("travel_lists.html")
+    
+    
+    
+    
 # ===== صفحه بررسی =====
 @travel_bp.route("/review", methods=["GET"])
 def review():
@@ -199,12 +208,14 @@ def result():
     )
 
     session.pop("form", None)
-
+    
+    
+    checklist_id = str(uuid.uuid4())
    
     return render_template(
         "travel_result.html",
         checklist=checklist,
         title=title,
-       
+        checklist_id=checklist_id
 
     )

@@ -1,8 +1,26 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}
+پیش نمایش فاکتور
+{% endblock %}
+
+
+{% block extra_head %}
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/invoice.css') }}">
+
+{% endblock %}
+
+
+{% block content %}
+ 
 <div class="invoice-wrapper">
 
-    {% include "invoice_body.html" %}
+   {% include "partials/invoice_body.html" %}
 
 </div>
+
 
 <div class="buttons">
 
@@ -10,9 +28,8 @@
         ویرایش
     </button>
 
-    <form action="/save_invoice" method="post">
 
-        <!-- تمام اطلاعات فرم -->
+    <form action="{{ url_for('invoice.save_invoice_only') }}" method="post">
 
         <button type="submit">
             ثبت نهایی
@@ -21,3 +38,6 @@
     </form>
 
 </div>
+
+
+{% endblock %}

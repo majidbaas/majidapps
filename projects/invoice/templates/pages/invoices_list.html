@@ -286,7 +286,7 @@
                         <div class="invoice-actions">
 
                             <!-- پیش‌نمایش -->
-                            <a href="/invoice/preview/{{ inv[0] }}?source=list"
+                           <a href="{{ url_for('invoice.preview_saved_invoice', invoice_id=inv[0], source='list') }}" 
                                class="btn btn-outline-primary btn-sm"
                                title="پیش‌نمایش فاکتور">
                                 👁️
@@ -294,7 +294,7 @@
 
 
                             <!-- ویرایش -->
-                            <a href="/invoice/edit/{{ inv[0] }}"
+                           <a href="{{ url_for('invoice.edit_invoice', invoice_id=inv[0]) }}"
                                class="btn btn-outline-warning btn-sm"
                                title="ویرایش فاکتور">
                                 ✏️
@@ -302,7 +302,7 @@
 
 
                             <!-- دانلود PDF -->
-                            <a href="/invoice/download_pdf/{{ inv[0] }}"
+                           <a href="{{ url_for('invoice.download_pdf', invoice_id=inv[0]) }}"
                                class="btn btn-outline-success btn-sm"
                                title="دانلود فایل PDF">
                                 📄
@@ -310,7 +310,7 @@
 
 
                             <!-- حذف -->
-                            <form action="/invoice/delete/{{ inv[0] }}"
+                           <form action="{{ url_for('invoice.delete_invoice', invoice_id=inv[0]) }}"
                                   method="post"
                                   style="display:inline;"
                                   onsubmit="return confirm('آیا از حذف این فاکتور اطمینان دارید؟');">

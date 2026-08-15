@@ -354,9 +354,13 @@
          ========================================= -->
 
 <nav class="bottom-nav no-print">
-
+{% if request.path == '/invoice/' %}
+<a href="/" class="bottom-nav-item">
+   <span> 🌐 سایت اصلی</span>
+</a>
+{% endif %}
     <!-- صفحه اصلی -->
-    <a href="/"
+  <a href="{{ url_for('invoice.home') }}"
        class="bottom-nav-item bottom-home
        {% if request.path == '/' %}active{% endif %}">
 
@@ -370,12 +374,11 @@
          پیش نمایش فاکتور
          ========================================= -->
 
-{% if request.path == '/preview' or request.path.startswith('/invoice/preview/') %}
+{% if request.path == '/invoice/preview' or request.path.startswith('/invoice/preview/') %}
         {% if source == 'list' %}
 
             <!-- ویرایش -->
-            <a href="/invoice/edit/{{ invoice_id }}"
-               class="bottom-nav-item bottom-new">
+            <a href="{{ url_for('invoice.edit_invoice', invoice_id=invoice_id) }}"               class="bottom-nav-item bottom-new">
 
                 <span class="bottom-nav-icon">✏️</span>
                 <span>ویرایش فاکتور</span>
@@ -395,7 +398,7 @@
 
 
             <!-- لیست -->
-            <a href="/invoices"
+         <a href="{{ url_for('invoice.invoices_list') }}"
                class="bottom-nav-item bottom-settings active">
 
                 <span class="bottom-nav-icon">📋</span>
@@ -418,7 +421,7 @@
 
             <!-- ثبت نهایی -->
             <form method="POST"
-                  action="/invoice/final-save"
+                 action="{{ url_for('invoice.final_save_invoice') }}"
                   style="margin:0; padding:0; display:flex; flex:1; max-width:240px;">
 
                 <button type="submit"
@@ -433,7 +436,7 @@
 
 
             <!-- لیست -->
-            <a href="/invoices"
+          <a href="{{ url_for('invoice.invoices_list') }}"
                class="bottom-nav-item bottom-settings">
 
                 <span class="bottom-nav-icon">📋</span>
@@ -451,7 +454,7 @@
     {% elif request.path == '/invoice/new'
           or request.path.startswith('/invoice/edit/') %}
    <!-- فاکتور جدید -->
-        <a href="/invoice/new"
+     <a href="{{ url_for('invoice.new_invoice') }}"
            class="bottom-nav-item bottom-new
            {% if request.path == '/invoice/new' %}active{% endif %}">
 
@@ -462,7 +465,7 @@
 
         <!-- ثبت موقت -->
         <button type="submit"
-                formaction="/preview"
+                formaction="{{ url_for('invoice.preview') }}"
                 form="invoice-form"
                 class="bottom-nav-item bottom-preview">
 
@@ -476,7 +479,7 @@
 
 
         <!-- لیست -->
-        <a href="/invoices"
+      <a href="{{ url_for('invoice.invoices_list') }}"
            class="bottom-nav-item bottom-list">
 
             <span class="bottom-nav-icon">📋</span>
@@ -493,7 +496,7 @@
 
 
         <!-- فاکتور جدید -->
-        <a href="/invoice/new"
+       <a href="{{ url_for('invoice.new_invoice') }}"
            class="bottom-nav-item bottom-new
            {% if request.path == '/invoice/new' %}active{% endif %}">
 
@@ -504,7 +507,7 @@
 
 
         <!-- لیست فاکتورها -->
-        <a href="/invoices"
+      <a href="{{ url_for('invoice.invoices_list') }}"
            class="bottom-nav-item bottom-list
            {% if request.path == '/invoices' %}active{% endif %}">
 
@@ -515,7 +518,7 @@
 
 
         <!-- تنظیمات -->
-        <a href="/settings"
+      <a href="{{ url_for('invoice.settings') }}"
            class="bottom-nav-item bottom-settings
            {% if request.path == '/settings' %}active{% endif %}">
 

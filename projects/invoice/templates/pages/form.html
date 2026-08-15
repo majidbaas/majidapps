@@ -50,7 +50,7 @@
 
         <div class="card-body">
             <!-- در حالت ویرایش، اکشن را به مسیر ذخیره تغییر می‌دهیم (فعلاً همان است) -->
-<form method="POST" action="/invoice" id="invoice-form">                
+<form method="POST" action="{{ url_for('invoice.preview') }}" id="invoice-form">          
                 <!-- ردیف اول: تاریخ و شماره فاکتور -->
                 <div class="row mb-4">
                     <div class="col-md-4">
@@ -223,5 +223,5 @@
 </div>
              
 
-<script src="{{ url_for('static', filename='js/invoice.js') }}"></script>
+<script src="{{ url_for('invoice.static', filename='js/invoice.js') }}"></script>
 {% endblock %}

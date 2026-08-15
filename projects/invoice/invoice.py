@@ -1,26 +1,36 @@
-from flask import Flask, render_template, request, make_response, redirect, url_for, session
+from flask import Blueprint, render_template, request, make_response, redirect, url_for, session
 import os
-
+from flask import current_app
 import tempfile
 from weasyprint import HTML   
 from werkzeug.utils import secure_filename
-from utils import to_persian_number, to_persian_text
-from db import (
+ 
+from .utils import to_persian_number, to_persian_text
+
+from .db import (
     create_database,
     get_settings,
     save_settings,
-    save_invoice,
     get_all_invoices,
     get_invoice_by_id,
     get_invoice_items_by_invoice_id,
-    delete_invoice_by_id   
+    delete_invoice_by_id,
+    save_invoice
+)
+ 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+invoice_bp = Blueprint(
+    "invoice",
+    __name__,
+    template_folder="templates",
+    static_folder="static"
 )
 
-app = Flask(__name__)
-UPLOAD_FOLDER = "static/uploads"
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.secret_key = "supersecretkey"
-
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "static/uploads")
+    
+   
+   
 create_database()
 
 def fa_num(text):
@@ -30,8 +40,11 @@ def fa_num(text):
     for e, f in zip(en, fa):
         text = text.replace(e, f)
     return text
-app.jinja_env.filters["fa"] = fa_num
-
+@invoice_bp.app_template_filter("fa")
+def fa_filter(text):
+    return fa_num(text)
+    
+    
 def build_invoice_data(form):
     data = {}
     data["buyer"] = form.get("buyer")
@@ -119,15 +132,15 @@ def build_invoice_data(form):
     }
     return data
 
-@app.route("/settings/save", methods=["POST"])
+@invoice_bp.route("/settings/save", methods=["POST"])
 def save_settings_route():
     settings = get_settings()
     logo_name = settings["logo"]
     logo = request.files.get("logo")
     if logo and logo.filename != "":
         filename = secure_filename(logo.filename)
-        os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
-        logo.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+        os.makedirs(current_app.config["UPLOAD_FOLDER"], exist_ok=True)
+        logo.save(os.path.join(current_app.config["UPLOAD_FOLDER"], filename))
         logo_name = filename
     data = {
         "shop_name": request.form["shop_name"],
@@ -142,16 +155,15 @@ def save_settings_route():
         "signature": ""
     }
     save_settings(data)
-    return redirect("/settings")
-@app.route("/invoice/edit/<int:invoice_id>", methods=["GET"])
+    return redirect(url_for("invoice.settings"))
+@invoice_bp.route("/invoice/edit/<int:invoice_id>", methods=["GET"])
 def edit_invoice(invoice_id):
     invoice = get_invoice_by_id(invoice_id)
     items_tuple = get_invoice_items_by_invoice_id(invoice_id)
     settings = get_settings()
     
     if not invoice:
-        return redirect("/invoices")
-
+        return redirect(url_for("invoice.invoices_list"))
    
     items_list = []
     if items_tuple:
@@ -187,7 +199,7 @@ def edit_invoice(invoice_id):
 # ============================================================
 # مسیر تنظیمات (با دکمه برگشت به خانه)
 # ============================================================
-@app.route("/settings")
+@invoice_bp.route("/settings")
 def settings():
     settings = get_settings()
     # به صفحه خانه برمی‌گردد
@@ -197,20 +209,22 @@ def settings():
 # ============================================================
 # مسیر حذف فاکتور (تکمیل شده)
 # ============================================================
-@app.route("/invoice/delete/<int:invoice_id>", methods=["POST"])
+@invoice_bp.route("/invoice/delete/<int:invoice_id>", methods=["POST"])
 def delete_invoice(invoice_id):
     delete_invoice_by_id(invoice_id)  
-    return redirect("/invoices")
-@app.route("/", methods=["GET"])
+    return redirect(url_for("invoice.invoices_list"))
+
+    
+@invoice_bp.route("/", methods=["GET"])
 def home():
     return render_template("pages/home.html")
     
-@app.route("/invoice/new")
+@invoice_bp.route("/new")
 def new_invoice():
     settings = get_settings()
     return render_template("pages/form.html", settings=settings)
  
-@app.route("/preview", methods=["POST"])
+@invoice_bp.route("/preview", methods=["POST"])
 def preview():
     data = build_invoice_data(request.form)
 
@@ -228,13 +242,13 @@ def preview():
         to_persian_text=to_persian_text
     )
     
-@app.route("/invoice/final-save", methods=["POST"])
+@invoice_bp.route("/invoice/final-save", methods=["POST"])
 def final_save_invoice():
 
     data = session.get("preview_invoice")
-
+ 
     if not data:
-        return redirect("/invoice/new")
+        return redirect(url_for("invoice.new_invoice"))
 
     # ذخیره نهایی در دیتابیس
     save_invoice(data)
@@ -242,15 +256,15 @@ def final_save_invoice():
     # بعد از ذخیره، اطلاعات موقت را پاک می‌کنیم
     session.pop("preview_invoice", None)
 
-    return redirect("/invoices")
+    return redirect(url_for("invoice.invoices_list"))
 
-@app.route("/invoice/save", methods=["POST"])
+@invoice_bp.route("/invoice/save", methods=["POST"])
 def save_invoice_only():
     data = build_invoice_data(request.form)
     save_invoice(data["save_data"])
-    return redirect("/invoices")
+    return redirect(url_for("invoice.invoices_list"))
 
-@app.route("/invoices")
+@invoice_bp.route("/invoices")
 def invoices_list():
     all_invoices = get_all_invoices()
     return render_template("pages/invoices_list.html", invoices=all_invoices)
@@ -316,7 +330,7 @@ def generate_pdf_from_invoice_id(invoice_id, download=True):
         response.headers["Content-Disposition"] = f"inline; filename=invoice_{invoice_id}.pdf"
     return response
 
-@app.route("/invoice/download_pdf/<int:invoice_id>", methods=["GET"])
+@invoice_bp.route("/invoice/download_pdf/<int:invoice_id>", methods=["GET"])
 def download_pdf(invoice_id):
     return generate_pdf_from_invoice_id(invoice_id, download=True)
 
@@ -324,7 +338,7 @@ def download_pdf(invoice_id):
 # ============================================================
 # مسیر پیش‌نمایش فاکتورهای ثبت شده (از روی دیتابیس)
 # ============================================================
-@app.route("/invoice/preview/<int:invoice_id>", methods=["GET"])
+@invoice_bp.route("/invoice/preview/<int:invoice_id>", methods=["GET"])
 def preview_saved_invoice(invoice_id):
     source = "list"
     invoice = get_invoice_by_id(invoice_id)
@@ -376,5 +390,4 @@ def preview_saved_invoice(invoice_id):
         to_persian_text=to_persian_text
     )
     
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5003, debug=False)
+ 
