@@ -7,11 +7,11 @@ app.config["UPLOAD_FOLDER"] = "projects/invoice/static/uploads"
 # ===== ثبت Blueprintها =====
 from projects.travel.travel import travel_bp
 from projects.food.food import food_bp
-from projects.invoice.invoice import invoice_bp
+# from projects.invoice.invoice import invoice_bp
 
 app.register_blueprint(travel_bp, url_prefix='/travel')
 app.register_blueprint(food_bp, url_prefix='/food')
-app.register_blueprint(invoice_bp, url_prefix='/invoice')
+# app.register_blueprint(invoice_bp, url_prefix='/invoice')
 
 # لیست پروژه‌ها (برای نمایش در صفحه اصلی)
 PROJECTS = [
