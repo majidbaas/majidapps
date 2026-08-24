@@ -1,8 +1,16 @@
 from flask import Flask, render_template
  import os
 app = Flask(__name__)
+
+app.config["DEBUG"] = False
+app.config["TESTING"] = False
+
+
+
 app.secret_key = "global_super_secret_key"
 app.config["UPLOAD_FOLDER"] = "projects/invoice/static/uploads"
+
+
 # ===== ثبت Blueprintها =====
 # ===== ثبت Blueprintها =====
 from projects.travel.travel import travel_bp
@@ -79,5 +87,6 @@ if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
         port=int(os.environ.get("PORT", 8000)),
-        debug=False
+        debug=False,
+        use_reloader=False
     )
