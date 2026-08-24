@@ -1,6 +1,5 @@
 from flask import Flask, render_template
-from projects.invoice.invoice import invoice_bp
-import os
+ import os
 app = Flask(__name__)
 app.secret_key = "global_super_secret_key"
 app.config["UPLOAD_FOLDER"] = "projects/invoice/static/uploads"
