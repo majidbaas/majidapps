@@ -21,6 +21,11 @@ app.register_blueprint(travel_bp, url_prefix='/travel')
 app.register_blueprint(food_bp, url_prefix='/food')
 # app.register_blueprint(invoice_bp, url_prefix='/invoice')
 
+
+print("=== REGISTERED ROUTES ===")
+print(app.url_map)
+
+
 # لیست پروژه‌ها (برای نمایش در صفحه اصلی)
 PROJECTS = [
    {
