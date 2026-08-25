@@ -1,5 +1,16 @@
 from flask import Flask, render_template
 import os
+
+import sys
+
+print("=== DEBUG PATH ===")
+print("CURRENT DIR:", os.getcwd())
+print("APP DIR:", os.path.dirname(os.path.abspath(__file__)))
+print("FILES:", os.listdir(os.path.dirname(os.path.abspath(__file__))))
+print("PYTHON PATH:", sys.path)
+print("=== END DEBUG ===")
+
+
 app = Flask(__name__)
 
 app.config["DEBUG"] = False
